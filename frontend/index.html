@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Viltrum full-stack</title>
+  <link rel="stylesheet" href="/app.css" />
+</head>
+<body>
+  <div id="app">
+    <header class="top">
+      <a class="mark" href="/" id="brand">Viltrum</a>
+      <nav class="nav" id="nav" hidden>
+        <button type="button" class="nav-link is-active" data-view="items">Items</button>
+        <button type="button" class="nav-link" data-view="users" id="nav-users" hidden>Users</button>
+        <button type="button" class="nav-link" data-view="account">Account</button>
+      </nav>
+      <div class="top-end" id="top-end"></div>
+    </header>
+
+    <main>
+      <section id="view-login" class="panel">
+        <h1>Sign in</h1>
+        <p class="lead">Same-origin API on Viltrum. Demo store lives in process memory.</p>
+        <form id="login-form" class="form" autocomplete="on">
+          <label>
+            <span>Email</span>
+            <input name="email" type="email" required value="admin@example.com" />
+          </label>
+          <label>
+            <span>Password</span>
+            <input name="password" type="password" required value="changethis" />
+          </label>
+          <button type="submit" class="btn">Sign in</button>
+          <p class="hint" id="login-error" role="alert"></p>
+        </form>
+      </section>
+
+      <section id="view-items" class="panel" hidden>
+        <div class="row">
+          <h1>Items</h1>
+          <button type="button" class="btn" id="item-new">New item</button>
+        </div>
+        <form id="item-form" class="form card" hidden>
+          <input type="hidden" name="id" />
+          <label>
+            <span>Title</span>
+            <input name="title" required maxlength="200" />
+          </label>
+          <label>
+            <span>Description</span>
+            <textarea name="description" rows="3" maxlength="2000"></textarea>
+          </label>
+          <div class="row">
+            <button type="submit" class="btn">Save</button>
+            <button type="button" class="btn btn-quiet" id="item-cancel">Cancel</button>
+          </div>
+        </form>
+        <ul id="item-list" class="list"></ul>
+        <p class="empty" id="items-empty" hidden>No items yet.</p>
+      </section>
+
+      <section id="view-users" class="panel" hidden>
+        <h1>Users</h1>
+        <p class="lead">Superuser only. In-memory list.</p>
+        <ul id="user-list" class="list"></ul>
+      </section>
+
+      <section id="view-account" class="panel" hidden>
+        <h1>Account</h1>
+        <dl class="meta" id="account-meta"></dl>
+        <button type="button" class="btn btn-quiet" id="logout-btn">Sign out</button>
+      </section>
+    </main>
+
+    <footer class="foot">
+      <p>
+        <a href="https://github.com/Tuntii/full-stack-viltrum-template">full-stack-viltrum-template</a>
+        on
+        <a href="https://github.com/Tuntii/viltrum">Viltrum</a>.
+        Inspired by
+        <a href="https://github.com/fastapi/full-stack-fastapi-template">full-stack-fastapi-template</a>
+        — not a port.
+      </p>
+    </footer>
+  </div>
+  <script src="/app.js"></script>
+</body>
+</html>

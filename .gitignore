@@ -1,0 +1,19 @@
+# V
+*.so
+*.dll
+*.dylib
+*.exe
+*.tmp
+/full-stack-viltrum-template
+/full_stack
+
+# Editors / OS
+.DS_Store
+.idea/
+.vscode/
+*.swp
+*~
+
+# Local env
+.env
+.env.*
