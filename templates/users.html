@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>@{page.title} · Viltrum</title>
+  <link rel="stylesheet" href="/static/style.css" />
+</head>
+<body>
+  <div class="shell">
+    <header class="top">
+      <a class="mark" href="/items">Viltrum</a>
+      <nav class="nav">
+        <a class="nav-link" href="/items">Items</a>
+        <a class="nav-link is-active" href="/users">Users</a>
+        <a class="nav-link" href="/account">Account</a>
+      </nav>
+      <span class="top-end">@{page.email}</span>
+    </header>
+    <main class="main">
+      <h1>Users</h1>
+      <p class="lead">Superuser view. In-memory store.</p>
+      <ul class="list">
+        @{users_html}
+      </ul>
+    </main>
+    <footer class="foot">
+      <p><a href="/items">Items</a></p>
+    </footer>
+  </div>
+</body>
+</html>

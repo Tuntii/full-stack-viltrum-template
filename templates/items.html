@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>@{page.title} · Viltrum</title>
+  <link rel="stylesheet" href="/static/style.css" />
+</head>
+<body>
+  <div class="shell">
+    <header class="top">
+      <a class="mark" href="/items">Viltrum</a>
+      <nav class="nav">
+        <a class="nav-link is-active" href="/items">Items</a>
+        @{nav_users}
+        <a class="nav-link" href="/account">Account</a>
+      </nav>
+      <span class="top-end">@{page.email}</span>
+    </header>
+    <main class="main">
+      <h1>Items</h1>
+      <p class="flash">@{page.flash}</p>
+      <form class="form card" method="post" action="/items">
+        <label>
+          <span>Title</span>
+          <input name="title" required maxlength="200" placeholder="New item" />
+        </label>
+        <label>
+          <span>Description</span>
+          <textarea name="description" rows="2" maxlength="2000" placeholder="Optional"></textarea>
+        </label>
+        <button type="submit" class="btn">Add item</button>
+      </form>
+      <ul class="list">
+        @{items_html}
+      </ul>
+    </main>
+    <footer class="foot">
+      <p>JSON twin: GET /api/v1/items/ with the same cookie or a Bearer token.</p>
+    </footer>
+  </div>
+</body>
+</html>

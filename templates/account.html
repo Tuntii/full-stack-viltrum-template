@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>@{page.title} · Viltrum</title>
+  <link rel="stylesheet" href="/static/style.css" />
+</head>
+<body>
+  <div class="shell">
+    <header class="top">
+      <a class="mark" href="/items">Viltrum</a>
+      <nav class="nav">
+        <a class="nav-link" href="/items">Items</a>
+        @{nav_users}
+        <a class="nav-link is-active" href="/account">Account</a>
+      </nav>
+      <span class="top-end">@{page.email}</span>
+    </header>
+    <main class="main">
+      <h1>Account</h1>
+      <dl class="meta">
+        <dt>Email</dt><dd>@{page.email}</dd>
+        <dt>Name</dt><dd>@{full_name}</dd>
+        <dt>Role</dt><dd>@{role}</dd>
+        <dt>Id</dt><dd>@{user_id}</dd>
+      </dl>
+      <form method="post" action="/logout">
+        <button type="submit" class="btn btn-quiet">Sign out</button>
+      </form>
+    </main>
+    <footer class="foot">
+      <p><a href="/items">Items</a></p>
+    </footer>
+  </div>
+</body>
+</html>

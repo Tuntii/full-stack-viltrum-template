@@ -1,44 +1,20 @@
 module main
 
-// In-memory app state. Teaching stand-in for a database.
-// Production apps pick their own store (Postgres, SQLite, files).
-// Viltrum itself has no ORM — by design.
+// In-memory persistence. Swap this file for Postgres/SQLite later;
+// handlers should not care.
 
 import crypto.sha256
 import rand
 import time
 
-struct User {
-	id       int
-	email    string
-	full_name string
-	is_superuser bool
-	hashed_password string
-}
-
-struct Item {
-	id          int
-	title       string
-	description string
-	owner_id    int
-}
-
-struct Session {
-	token     string
-	user_id   int
-	expires_at i64
-}
-
 struct Store {
 mut:
-	next_user_id int = 1
-	next_item_id int = 1
-	users        map[int]User
-	items        map[int]Item
-	// token -> session
-	sessions     map[string]Session
-	// email lower -> user id
-	email_index  map[string]int
+	next_user_id  int = 1
+	next_item_id  int = 1
+	users         map[int]User
+	items         map[int]Item
+	sessions      map[string]Session
+	email_index   map[string]int
 	password_salt string = 'viltrum-full-stack-demo-salt'
 }
 
@@ -48,6 +24,11 @@ fn (s &Store) hash_password(password string) string {
 
 fn (s &Store) check_password(password string, hashed string) bool {
 	return s.hash_password(password) == hashed
+}
+
+fn (mut s Store) seed_demo() {
+	s.seed_superuser('admin@example.com', 'changethis', 'Admin')
+	_ := s.create_item(1, 'Welcome item', 'Edit or delete from the dashboard.') or { Item{} }
 }
 
 fn (mut s Store) seed_superuser(email string, password string, full_name string) {
@@ -103,12 +84,10 @@ fn (s &Store) user_by_id(id int) ?User {
 
 fn (mut s Store) issue_token(user_id int) string {
 	token := 'vt_${rand.u64()}_${rand.u64()}_${time.sys_mono_now()}'
-	// 7 days
-	expires := time.now().unix() + 7 * 24 * 3600
 	s.sessions[token] = Session{
 		token:      token
 		user_id:    user_id
-		expires_at: expires
+		expires_at: time.now().unix() + 7 * 24 * 3600
 	}
 	return token
 }
@@ -146,6 +125,24 @@ fn (s &Store) item_by_id(id int) ?Item {
 	return s.items[id] or { none }
 }
 
+fn (s &Store) items_for(u User) []Item {
+	mut out := []Item{}
+	for _, it in s.items {
+		if u.is_superuser || it.owner_id == u.id {
+			out << it
+		}
+	}
+	return out
+}
+
+fn (s &Store) all_users() []User {
+	mut out := []User{}
+	for _, u in s.users {
+		out << u
+	}
+	return out
+}
+
 fn (mut s Store) update_item(id int, title string, description string) !Item {
 	old := s.items[id] or { return error('not found') }
 	new_title := if title.trim_space().len > 0 { title.trim_space() } else { old.title }
@@ -165,17 +162,4 @@ fn (mut s Store) delete_item(id int) bool {
 		return true
 	}
 	return false
-}
-
-fn json_escape(s string) string {
-	return s.replace('\\', '\\\\').replace('"', '\\"').replace('\n', '\\n').replace('\r', '\\r')
-}
-
-fn user_public_json(u User) string {
-	su := if u.is_superuser { 'true' } else { 'false' }
-	return '{"id":${u.id},"email":"${json_escape(u.email)}","full_name":"${json_escape(u.full_name)}","is_superuser":${su}}'
-}
-
-fn item_json(it Item) string {
-	return '{"id":${it.id},"title":"${json_escape(it.title)}","description":"${json_escape(it.description)}","owner_id":${it.owner_id}}'
 }

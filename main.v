@@ -1,9 +1,14 @@
 module main
 
-// Full-stack starter for Viltrum.
-// Layout inspired by https://github.com/fastapi/full-stack-fastapi-template
-// (API + same-origin SPA + auth + items). Not a port: no Postgres, no React
-// build step, no Docker/Traefik. Own engine, in-memory store, static UI.
+// Full-stack Viltrum starter.
+// Inspired by https://github.com/fastapi/full-stack-fastapi-template — not a port.
+//
+// Layout:
+//   models / store / auth / respond / views
+//   routes_web  — browser (SSR + cookie)
+//   routes_api  — JSON /api/v1 (bearer or cookie)
+//   templates/  — V $tmpl HTML
+//   static/     — CSS only
 
 import os
 import viltrum {
@@ -17,33 +22,28 @@ import viltrum {
 fn main() {
 	shared store := Store{}
 	lock store {
-		// Demo credentials — change before any real deploy.
-		store.seed_superuser('admin@example.com', 'changethis', 'Admin')
-		_ := store.create_item(1, 'Welcome item', 'Delete me or edit me from the dashboard.') or {
-			Item{}
-		}
+		store.seed_demo()
 	}
 
-	mut frontend := os.join_path(os.dir(@FILE), 'frontend')
-	if !os.is_dir(frontend) {
-		frontend = os.abs_path('frontend')
+	mut static_dir := os.join_path(os.dir(@FILE), 'static')
+	if !os.is_dir(static_dir) {
+		static_dir = os.abs_path('static')
 	}
 
 	mut app := new()
 	app.use(recover)
 	app.use(logger)
-	// SPA assets: index.html, app.css, app.js at site root when present.
-	app.use(static_files('/', frontend))
+	app.use(static_files('/static', static_dir))
 
+	register_web(mut app, shared store)
 	app.mount('/api/v1', fn [shared store] (mut m Mount) {
 		register_api(mut m, shared store)
 	})
 
 	addr := os.getenv_opt('VILTRUM_ADDR') or { '127.0.0.1:8090' }
-	println('Viltrum full-stack -> http://${addr}')
-	println('  UI     http://${addr}/')
-	println('  API    http://${addr}/api/v1/health')
-	println('  login  admin@example.com / changethis')
-	println('Inspired by: https://github.com/fastapi/full-stack-fastapi-template')
+	println('full-stack-viltrum-template -> http://${addr}')
+	println('  UI   http://${addr}/login')
+	println('  API  http://${addr}/api/v1/health')
+	println('  demo admin@example.com / changethis')
 	app.listen(addr) or { panic(err) }
 }

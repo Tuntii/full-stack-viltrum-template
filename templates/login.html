@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>@{page.title} · Viltrum</title>
+  <link rel="stylesheet" href="/static/style.css" />
+</head>
+<body>
+  <div class="shell">
+    <header class="top">
+      <span class="mark">Viltrum</span>
+    </header>
+    <main class="main narrow">
+      <h1>Sign in</h1>
+      <p class="lead">Server-rendered starter. Cookie session for the UI; JSON under /api/v1.</p>
+      <p class="flash" role="alert">@{page.flash}</p>
+      <form class="form" method="post" action="/login">
+        <label>
+          <span>Email</span>
+          <input name="email" type="email" required value="admin@@example.com" autocomplete="username" />
+        </label>
+        <label>
+          <span>Password</span>
+          <input name="password" type="password" required value="changethis" autocomplete="current-password" />
+        </label>
+        <button type="submit" class="btn">Sign in</button>
+      </form>
+    </main>
+    <footer class="foot">
+      <p>
+        <a href="https://github.com/Tuntii/full-stack-viltrum-template">full-stack-viltrum-template</a>
+        on
+        <a href="https://github.com/Tuntii/viltrum">Viltrum</a>
+      </p>
+    </footer>
+  </div>
+</body>
+</html>

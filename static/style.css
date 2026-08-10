@@ -1,4 +1,4 @@
-/* System stack only. Warm ink on bone paper — no stock SaaS gradient kit. */
+/* System stack. Warm ink on bone — no stock SaaS kit. */
 :root {
   --bg: #f4efe6;
   --ink: #1a1814;
@@ -8,11 +8,10 @@
   --accent: #8b3a2a;
   --accent-ink: #fbf8f2;
   --danger: #7a1f1f;
-  --focus: #1a1814;
-  --radius: 2px;
   --font: ui-sans-serif, system-ui, -apple-system, "Segoe UI", sans-serif;
   --mono: ui-monospace, "Cascadia Code", "SF Mono", Menlo, monospace;
   --max: 40rem;
+  --radius: 2px;
 }
 
 *,
@@ -23,7 +22,6 @@
 
 html {
   font-size: 17px;
-  -webkit-text-size-adjust: 100%;
 }
 
 body {
@@ -35,7 +33,7 @@ body {
   line-height: 1.5;
 }
 
-#app {
+.shell {
   min-height: 100vh;
   display: flex;
   flex-direction: column;
@@ -55,7 +53,6 @@ body {
   letter-spacing: -0.02em;
   color: var(--ink);
   text-decoration: none;
-  font-size: 1.05rem;
 }
 
 .nav {
@@ -65,14 +62,10 @@ body {
 }
 
 .nav-link {
-  appearance: none;
-  border: 0;
-  background: transparent;
   color: var(--muted);
-  font: inherit;
+  text-decoration: none;
   font-size: 0.92rem;
   padding: 0.35rem 0.55rem;
-  cursor: pointer;
   border-radius: var(--radius);
 }
 
@@ -92,14 +85,18 @@ body {
   font-family: var(--mono);
 }
 
-main {
+.main {
   flex: 1;
   width: min(100% - 2rem, var(--max));
   margin: 0 auto;
   padding: 2.5rem 0 3rem;
 }
 
-.panel h1 {
+.main.narrow {
+  max-width: 24rem;
+}
+
+h1 {
   margin: 0 0 0.35rem;
   font-size: 1.75rem;
   font-weight: 650;
@@ -110,14 +107,18 @@ main {
 .lead {
   margin: 0 0 1.5rem;
   color: var(--muted);
-  max-width: 32ch;
+}
+
+.lead code,
+.foot code {
+  font-family: var(--mono);
+  font-size: 0.85em;
 }
 
 .row {
   display: flex;
   align-items: center;
   justify-content: space-between;
-  gap: 1rem;
   margin-bottom: 1rem;
 }
 
@@ -152,13 +153,13 @@ textarea {
 input:focus,
 textarea:focus,
 button:focus-visible {
-  outline: 2px solid var(--focus);
+  outline: 2px solid var(--ink);
   outline-offset: 2px;
 }
 
 textarea {
   resize: vertical;
-  min-height: 4.5rem;
+  min-height: 3.5rem;
 }
 
 .btn {
@@ -177,10 +178,6 @@ textarea {
 
 .btn:hover {
   filter: brightness(1.05);
-}
-
-.btn:active {
-  filter: brightness(0.96);
 }
 
 .btn-quiet {
@@ -208,28 +205,17 @@ textarea {
   background: color-mix(in srgb, var(--danger) 8%, transparent);
 }
 
-.hint {
-  min-height: 1.25rem;
-  margin: 0;
-  color: var(--danger);
-  font-size: 0.9rem;
-}
-
 .card {
   padding: 1rem;
   margin-bottom: 1.25rem;
   background: var(--surface);
   border: 1px solid var(--line);
-  border-radius: var(--radius);
 }
 
 .list {
   list-style: none;
   margin: 0;
   padding: 0;
-  display: flex;
-  flex-direction: column;
-  gap: 0.65rem;
 }
 
 .list li {
@@ -246,7 +232,6 @@ textarea {
 
 .list .title {
   font-weight: 600;
-  letter-spacing: -0.01em;
 }
 
 .list .desc {
@@ -256,14 +241,20 @@ textarea {
   margin: 0;
 }
 
-.list .actions {
-  display: flex;
-  gap: 0.4rem;
-  align-items: start;
+.tag {
+  font-family: var(--mono);
+  font-size: 0.75rem;
+  color: var(--muted);
 }
 
-.empty {
-  color: var(--muted);
+.inline {
+  margin: 0;
+}
+
+.flash {
+  color: var(--danger);
+  font-size: 0.95rem;
+  margin: 0 0 1rem;
 }
 
 .meta {
@@ -271,7 +262,6 @@ textarea {
   display: grid;
   grid-template-columns: 7rem 1fr;
   gap: 0.4rem 0.75rem;
-  font-size: 0.95rem;
 }
 
 .meta dt {
@@ -301,12 +291,6 @@ textarea {
   color: var(--ink);
 }
 
-.tag {
-  font-family: var(--mono);
-  font-size: 0.75rem;
-  color: var(--muted);
-}
-
 @media (max-width: 520px) {
   .top {
     flex-wrap: wrap;
@@ -319,9 +303,5 @@ textarea {
 
   .list li {
     grid-template-columns: 1fr;
-  }
-
-  .list .actions {
-    grid-column: 1;
   }
 }
