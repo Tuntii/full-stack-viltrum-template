@@ -25,9 +25,8 @@ fn register_web(mut app App, shared store Store) {
 	})
 
 	app.post('/login', fn [shared store] (req Request) Response {
-		body := req.text()
-		email := form_field(body, 'email') or { '' }
-		password := form_field(body, 'password') or { '' }
+		email := req.form_value('email') or { '' }
+		password := req.form_value('password') or { '' }
 		mut token := ''
 		lock store {
 			u := store.user_by_email(email) or {
@@ -65,9 +64,8 @@ fn register_web(mut app App, shared store Store) {
 
 	app.post('/items', fn [shared store] (req Request) Response {
 		u := require_user(shared store, req) or { return redirect('/login') }
-		body := req.text()
-		title := form_field(body, 'title') or { '' }
-		description := form_field(body, 'description') or { '' }
+		title := req.form_value('title') or { '' }
+		description := req.form_value('description') or { '' }
 		mut ok := true
 		lock store {
 			_ := store.create_item(u.id, title, description) or {
