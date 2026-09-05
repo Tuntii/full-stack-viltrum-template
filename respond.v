@@ -6,11 +6,8 @@ import viltrum {
 	Response
 	empty
 	json
+	json_escape
 	text
-}
-
-fn json_escape(s string) string {
-	return s.replace('\\', '\\\\').replace('"', '\\"').replace('\n', '\\n').replace('\r', '\\r')
 }
 
 fn user_public_json(u User) string {
@@ -57,46 +54,4 @@ fn redirect(location string) Response {
 fn with_cookie(mut r Response, cookie string) Response {
 	r.headers.set('Set-Cookie', cookie)
 	return r
-}
-
-// form_field reads application/x-www-form-urlencoded (or simple JSON string fields).
-fn form_field(req_body string, key string) ?string {
-	// Prefer JSON helpers path when body looks like JSON — handled by callers via json_string.
-	for part in req_body.split('&') {
-		if part.len == 0 {
-			continue
-		}
-		eq := part.index('=') or {
-			if url_decode_form(part) == key {
-				return ''
-			}
-			continue
-		}
-		k := url_decode_form(part[..eq])
-		if k == key {
-			return url_decode_form(part[eq + 1..])
-		}
-	}
-	return none
-}
-
-fn url_decode_form(s string) string {
-	mut out := []u8{cap: s.len}
-	mut i := 0
-	bytes := s.bytes()
-	for i < bytes.len {
-		c := bytes[i]
-		if c == `+` {
-			out << ` `
-			i++
-		} else if c == `%` && i + 2 < bytes.len {
-			h := s[i + 1..i + 3]
-			out << u8(h.parse_int(16, 8) or { 0 })
-			i += 3
-		} else {
-			out << c
-			i++
-		}
-	}
-	return out.bytestr()
 }

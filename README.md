@@ -1,6 +1,6 @@
 # Full Stack Viltrum Template
 
-Clean teaching app on [Viltrum](https://github.com/Tuntii/viltrum):
+Clean teaching app on [Viltrum](https://github.com/Tuntii/viltrum) **≥ 0.9.0** (`form_value`, `json_escape`, JSON field helpers):
 
 - **Web UI** — server-rendered HTML (`$tmpl`) + session cookie  
 - **JSON API** — `/api/v1` (Bearer token **or** same cookie)  
@@ -79,7 +79,7 @@ TOKEN=$(curl -s -X POST http://127.0.0.1:8090/api/v1/login/access-token \
 curl -s http://127.0.0.1:8090/api/v1/items/ -H "Authorization: Bearer $TOKEN"
 ```
 
-Web login uses `POST /login` (form) and sets an `HttpOnly` `session` cookie. The API accepts that cookie too.
+Web login uses `POST /login` (`req.form_value`) and sets an `HttpOnly` `session` cookie. The API accepts that cookie too. JSON responses use `viltrum.json_escape` (not a local copy).
 
 ---
 
