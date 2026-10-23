@@ -354,6 +354,9 @@ textarea:focus-visible {
 .line {
   --stops: 5;
   position: relative;
+  /* The rider travels by transform; clip it so the page never widens. */
+  overflow-x: clip;
+  overflow-clip-margin: 1rem;
   display: grid;
   grid-template-columns: repeat(var(--stops), 1fr);
   margin: 0;
