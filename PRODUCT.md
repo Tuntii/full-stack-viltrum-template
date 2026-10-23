@@ -48,8 +48,11 @@ page, the dashboard, and the API are all answered by one small V binary.
 
 ## Brand Commitments
 
-- Viltrum logo (`assets/logo.svg` in the viltrum repo): black square, white circle, a constant-width
-  geometric black V. Monochrome.
+- Viltrum logo (`assets/` in the viltrum repo, by celaldursunduz, 2026-10-23): a circle cut by a slanted V,
+  monochrome, in four variants (black or white mark on transparent; black on a white disc; white on a black
+  disc). The template ships `static/logo.svg` (the black mark in graphite #141518, for light grounds),
+  `static/logo-white.svg` (for the graphite band, rail and footer) and `static/favicon.svg` (black on a white
+  disc, legible on any tab bar).
 - Voice from the Viltrum README: plain, technical, understated; numbers come with their method and date,
   and weak results are stated as plainly as strong ones.
 

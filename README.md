@@ -50,7 +50,7 @@ Serving needs Linux (Viltrum's engine is epoll): on Windows use WSL2, on macOS a
   routes_web.v      # browser pages + forms
   routes_api.v      # /api/v1 JSON
   templates/        # HTML shells (V $tmpl)
-  static/           # style.css, live.js (live readings, the train), logo.svg
+  static/           # style.css, live.js (live readings, the train), the logo variants
   scripts/setup.sh
 ```
 
@@ -127,6 +127,7 @@ Edge TLS: put Caddy/nginx in front ([Viltrum deploy](https://github.com/Tuntii/v
 
 - Inspiration: [fastapi/full-stack-fastapi-template](https://github.com/fastapi/full-stack-fastapi-template) (MIT)  
 - Engine: [Tuntii/viltrum](https://github.com/Tuntii/viltrum) (MIT)  
+- Logo: designed by [celaldursunduz](https://github.com/celaldursunduz) for Viltrum  
 
 ## License
 
