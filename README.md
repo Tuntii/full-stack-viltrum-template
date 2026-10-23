@@ -3,7 +3,8 @@
 Clean teaching app on [Viltrum](https://github.com/Tuntii/viltrum) **≥ 1.5.0**, the zero-allocation 1.x core
 (`Ctx` handlers, `c.json` with structs, `c.form_value`, `app.static_files`):
 
-- **Web UI** — server-rendered HTML (`$tmpl`) + session cookie  
+- **Landing page** — `/` introduces Viltrum, with live facts read from the running process  
+- **Admin dashboard** — server-rendered HTML (`$tmpl`) + session cookie, black-and-white like the logo  
 - **JSON API** — `/api/v1` (Bearer token **or** same cookie)  
 - **In-memory store** — no ORM, no Docker, no React build  
 
@@ -26,7 +27,8 @@ Serving needs Linux (Viltrum's engine is epoll): on Windows use WSL2, on macOS a
 
 | | |
 |--|--|
-| UI | http://127.0.0.1:8090/login |
+| Landing | http://127.0.0.1:8090/ |
+| Dashboard | http://127.0.0.1:8090/login |
 | API | `GET /api/v1/health` |
 | Demo | `admin@example.com` / `changethis` |
 | Bind | `VILTRUM_ADDR` (default `127.0.0.1:8090`) |
@@ -43,11 +45,12 @@ Serving needs Linux (Viltrum's engine is epoll): on Windows use WSL2, on macOS a
   store.v           # in-memory persistence
   auth.v            # bearer + cookie session
   respond.v         # json/html/redirect helpers
-  views.v           # $tmpl wrappers
+  views.v           # $tmpl wrappers, dashboard rail, table rows
+  stats.v           # live process facts for the landing page
   routes_web.v      # browser pages + forms
   routes_api.v      # /api/v1 JSON
   templates/        # HTML shells (V $tmpl)
-  static/style.css
+  static/           # style.css, landing.js (a few lines), logo.svg
   scripts/setup.sh
 ```
 

@@ -17,3 +17,8 @@
 # Local env
 .env
 .env.*
+
+# Impeccable working files (decision page, mocks, review captures)
+/.impeccable/mocks/
+/.impeccable/questions/
+/.impeccable/review/

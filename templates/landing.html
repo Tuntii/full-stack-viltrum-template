@@ -1,0 +1,126 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Viltrum · HTTP framework for V</title>
+  <meta name="description" content="Viltrum is an HTTP framework for V with its own HTTP/1.1 engine. This page and its demo dashboard are served by it." />
+  <link rel="icon" href="/static/logo.svg" type="image/svg+xml" />
+  <link rel="stylesheet" href="/static/style.css" />
+</head>
+<body>
+  <header class="band">
+    <a class="brand" href="/"><img src="/static/logo.svg" alt="" width="56" height="56" />Viltrum</a>
+    <nav class="band-nav" aria-label="Viltrum">
+      <a href="https://github.com/Tuntii/viltrum/tree/main/docs">Docs</a>
+      <a href="https://github.com/Tuntii/viltrum">GitHub</a>
+    </nav>
+    @{band_action}
+  </header>
+  <main>
+    <div class="first">
+      <section class="hero">
+        <h1>You write routes.<br />Viltrum owns the wire.</h1>
+        <p class="lede">An HTTP framework for V with its own HTTP/1.1 engine: one epoll worker per CPU, pipelining, no allocation per request inside the framework, and no third-party code underneath.</p>
+        <div class="actions">
+          @{hero_action}
+          <div class="clone">
+            <code id="clone-cmd">git clone https://github.com/Tuntii/viltrum.git</code>
+            <button type="button" data-copy="clone-cmd" hidden>Copy</button>
+          </div>
+        </div>
+        <p class="note">@{hero_note}</p>
+      </section>
+
+      <section class="route" aria-labelledby="route-title">
+        <div class="route-head">
+          <h2 id="route-title"><img src="/static/logo.svg" alt="" width="32" height="32" />The route a request takes</h2>
+          <button type="button" id="send" class="plate plate-quiet" hidden>Send a request</button>
+        </div>
+        <ol class="line">
+          <li><span class="stop" style="--i:0"></span><b>Accept</b><span>One SO_REUSEPORT epoll worker per CPU</span></li>
+          <li><span class="stop" style="--i:1"></span><b>Parse</b><span>In place, no allocation; ambiguous framing gets 400</span></li>
+          <li><span class="stop" style="--i:2"></span><b>Route</b><span>:param, *rest, groups, middleware</span></li>
+          <li><span class="stop" style="--i:3"></span><b>Handler</b><span>Your fn (mut c Ctx)</span></li>
+          <li><span class="stop" style="--i:4"></span><b>Write</b><span>Pipelined responses batched into one write</span><output id="rtt" aria-live="polite"></output></li>
+          <li class="rider" aria-hidden="true"></li>
+        </ol>
+      </section>
+
+      <p class="strip" aria-label="This server, right now">
+        <span>Serving this page</span>
+        <span>Viltrum <b>@{facts.version}</b></span>
+        <span>workers <b>@{facts.workers}</b></span>
+        @{rss_fact}
+        <span>up <b>@{facts.uptime}</b></span>
+        <span>in memory <b>@{store_fact}</b></span>
+      </p>
+    </div>
+
+    <div class="stops">
+      <section class="section" aria-labelledby="one-file">
+        <div class="section-text">
+          <h2 id="one-file">A server in one file.</h2>
+          <p>Handlers get a <code>Ctx</code>: request views (<code>path</code>, <code>param</code>, <code>query_param</code>, <code>header</code>, <code>body</code>) and a response writer (<code>text</code>, <code>json</code>, <code>bytes</code>, <code>file</code>).</p>
+          <p><strong>Request strings are views</strong> into the connection's buffer, valid until the handler returns. <code>.clone()</code> what you keep.</p>
+        </div>
+        <pre><code>module main
+
+import viltrum
+
+fn main() {
+	mut app := viltrum.new()
+	app.use(viltrum.recover)
+	app.get('/', fn (mut c viltrum.Ctx) {
+		c.text(200, 'ok\n')
+	})
+	app.get('/hi/:name', fn (mut c viltrum.Ctx) {
+		c.text(200, c.param('name') or { 'world' })
+	})
+	app.listen('127.0.0.1:8080') or { panic(err) }
+}</code></pre>
+      </section>
+
+      <section class="section" aria-labelledby="core">
+        <div class="section-text">
+          <h2 id="core">What the core does.</h2>
+          <p>Everything below is in the framework itself, written for it. Serving is Linux only (epoll); handlers build and test on Linux, macOS and Windows.</p>
+          <p>Not in the 1.x core yet: the HTTP client, serving off Linux.</p>
+        </div>
+        <dl class="spec">
+          <dt>HTTP/1.1</dt><dd>Keep-alive, pipelining, <code>Expect: 100-continue</code>, HEAD. The parser is fuzzed in CI.</dd>
+          <dt>Engine</dt><dd>Backpressure, read, idle and write timeouts, <code>max_conns</code>, graceful shutdown on SIGINT and SIGTERM.</dd>
+          <dt>Routing</dt><dd>Parameters, trailing wildcards, groups, global and per-route middleware.</dd>
+          <dt>JSON</dt><dd><code>c.json(200, value)</code> with a compile-time encoder, no reflection.</dd>
+          <dt>TLS</dt><dd>TLS 1.3 on the same workers; certificates reload from disk without a restart.</dd>
+          <dt>Files</dt><dd>ETag, Last-Modified, 304, byte ranges, <code>sendfile</code> for large files.</dd>
+          <dt>Forms</dt><dd>urlencoded and multipart bodies parsed in place, no allocation.</dd>
+          <dt>WebSocket</dt><dd>RFC 6455 on the same workers, topics published across workers.</dd>
+          <dt>Tests</dt><dd><code>app.handle_raw(raw)</code> serves a request in-process, no socket.</dd>
+        </dl>
+      </section>
+
+      <section class="section" aria-labelledby="demo">
+        <div class="section-text">
+          <h2 id="demo">This demo is the starter.</h2>
+          <p>The page you are reading, the dashboard behind the sign-in and the JSON API are one V binary built from <a href="https://github.com/Tuntii/full-stack-viltrum-template">full-stack-viltrum-template</a>: server-rendered pages with <code>&#36;tmpl</code>, a cookie session, and an in-memory store.</p>
+          <p>The API takes the same cookie or a Bearer token.</p>
+        </div>
+        <pre><code>curl -s @{origin}/api/v1/health
+{"status":"ok"}
+
+curl -s -X POST @{origin}/api/v1/login/access-token \
+  -d 'username=admin%40example.com&amp;password=changethis'</code></pre>
+      </section>
+    </div>
+  </main>
+  <footer class="foot">
+    <a class="brand" href="/"><img src="/static/logo.svg" alt="" width="32" height="32" />Viltrum</a>
+    <span>MIT licensed. Built for <a href="https://vlang.io">V</a>.</span>
+    <a href="https://github.com/Tuntii/viltrum/tree/main/docs">Docs</a>
+    <a href="https://github.com/Tuntii/viltrum">Source</a>
+    <a href="https://http-arena.com/">HttpArena results</a>
+  </footer>
+  <script src="/static/landing.js" defer></script>
+</body>
+</html>

@@ -4,12 +4,16 @@ module main
 import viltrum
 
 fn register_web(mut app viltrum.App, shared store Store) {
+	// The landing page introduces Viltrum; its numbers come from this process.
 	app.get('/', fn [shared store] (mut c viltrum.Ctx) {
-		if _ := require_user(shared store, c) {
-			redirect(mut c, '/items')
-		} else {
-			redirect(mut c, '/login')
+		signed_in := if _ := require_user(shared store, c) { true } else { false }
+		mut items := 0
+		mut users := 0
+		rlock store {
+			items = store.items.len
+			users = store.users.len
 		}
+		html(mut c, 200, view_landing(signed_in, request_origin(c), process_facts(), items, users))
 	})
 
 	app.get('/login', fn [shared store] (mut c viltrum.Ctx) {
@@ -18,7 +22,13 @@ fn register_web(mut app viltrum.App, shared store Store) {
 			return
 		}
 		flash := c.query_param('error') or { '' }
-		html(mut c, 200, view_login(flash))
+		mut items := 0
+		mut users := 0
+		rlock store {
+			items = store.items.len
+			users = store.users.len
+		}
+		html(mut c, 200, view_login(flash, items, users))
 	})
 
 	app.post('/login', fn [shared store] (mut c viltrum.Ctx) {

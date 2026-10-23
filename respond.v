@@ -75,3 +75,11 @@ fn redirect(mut c viltrum.Ctx, location string) {
 	c.set_header('Location', location)
 	c.no_content(303)
 }
+
+// request_origin is the scheme and host the visitor used, for the examples a
+// page prints. Behind a proxy the scheme comes from X-Forwarded-Proto.
+fn request_origin(c &viltrum.Ctx) string {
+	host := c.header('Host') or { 'localhost' }
+	scheme := if p := c.header('X-Forwarded-Proto') { p } else { 'http' }
+	return html_escape('${scheme}://${host}')
+}
