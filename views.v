@@ -74,6 +74,20 @@ fn render_items_rows(items []Item) string {
 	return b
 }
 
+// render_recent_rows lists the request log newest first; static/live.js renders
+// the same markup from /api/v1/stats.
+fn render_recent_rows(rows []Served) string {
+	if rows.len == 0 {
+		return '<li class="wire-empty">Waiting for the first request.</li>'
+	}
+	mut b := ''
+	for i := rows.len - 1; i >= 0; i-- {
+		r := rows[i]
+		b += '<li data-seq="${r.seq}"><span class="m">${html_escape(r.method)}</span><span class="r">${html_escape(r.route)}</span><span class="s">${r.status}</span><span class="t">${r.us} µs</span></li>'
+	}
+	return b
+}
+
 fn render_users_rows(users []User) string {
 	mut b := ''
 	for u in users {
@@ -104,6 +118,7 @@ fn view_landing(signed_in bool, origin string, facts ProcessFacts) string {
 		''
 	}
 	store_fact := '${plural(facts.items, 'item')}, ${plural(facts.users, 'user')}'
+	recent_rows := render_recent_rows(facts.recent)
 	return $tmpl('templates/landing.html')
 }
 

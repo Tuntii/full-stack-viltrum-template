@@ -186,3 +186,14 @@ fn test_stats_are_live() {
 	assert body_of(get(app, '/', '')).contains('data-live="requests"')
 	assert body_of(get(app, '/login', '')).contains('class="pulse"')
 }
+
+fn test_request_log_hides_ids_and_probes() {
+	assert route_of('/items/12/delete', 303) == '/items/:id/delete'
+	assert route_of('/wp-login.php', 404) == '(no route)'
+	app := demo_app()
+	_ = get(app, '/api/v1/health', '')
+	_ = get(app, '/api/v1/stats', '') // the pages' polling stays out of the log
+	body := body_of(get(app, '/api/v1/stats', ''))
+	assert body.contains('"recent":[{"seq":1,"method":"GET","route":"/api/v1/health","status":200,')
+	assert !body.contains('"route":"/api/v1/stats"')
+}

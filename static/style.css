@@ -1,4 +1,5 @@
-/* Viltrum signage: the logo's black and white, square corners, solid rules. */
+/* Viltrum: the logo's graphite and white on a soft field. Rounded where hands
+   touch, hairlines where the eye reads, one heavy line for the route. */
 :root {
   --ink: #141518;
   --paper: #fff;
@@ -6,7 +7,17 @@
   --mute-dark: #a3a3a3;
   --hair: #d6d6d6;
   --wash: #f2f2f2;
-  --sans: "Helvetica Neue", Helvetica, "Nimbus Sans", Arial, sans-serif;
+  --field: #f2f3f5;
+  --line: #dfe1e5;
+  --control-line: #b9bcc2;
+  --line-dark: #2a2c31;
+  --radius: 12px;
+  --radius-sm: 8px;
+  /* The platform's UI face: Segoe UI on Windows, SF on Apple, Roboto or the
+     desktop face on Linux. Nothing is downloaded. */
+  --sans: system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+  --display: "Segoe UI Variable Display", "SF Pro Display", system-ui, -apple-system, "Segoe UI",
+    Roboto, "Helvetica Neue", Arial, sans-serif;
   --mono: ui-monospace, "SF Mono", "Cascadia Mono", Menlo, Consolas, monospace;
   --max: 96rem;
   /* Fluid on small screens; on wide ones it centers a --max column (percent
@@ -33,7 +44,7 @@ body {
   margin: 0;
   font-family: var(--sans);
   color: var(--ink);
-  background: var(--paper);
+  background: var(--field);
   line-height: 1.5;
 }
 
@@ -64,6 +75,7 @@ h1,
 h2,
 h3 {
   margin: 0;
+  font-family: var(--display);
   font-weight: 700;
   letter-spacing: -0.02em;
   line-height: 1.1;
@@ -120,11 +132,11 @@ p {
   min-height: 3rem;
   padding: 0 1.25rem;
   border: 2px solid var(--ink);
-  border-radius: 0;
+  border-radius: var(--radius-sm);
   background: var(--ink);
   color: var(--paper);
   font: inherit;
-  font-weight: 700;
+  font-weight: 600;
   font-size: 1.0625rem;
   text-decoration: none;
   cursor: pointer;
@@ -170,9 +182,9 @@ textarea {
   font: inherit;
   color: var(--ink);
   background: var(--paper);
-  border: 2px solid var(--ink);
-  border-radius: 0;
-  padding: 0 0.75rem;
+  border: 1px solid var(--control-line);
+  border-radius: var(--radius-sm);
+  padding: 0 0.875rem;
   min-height: 3rem;
   width: 100%;
 }
@@ -190,6 +202,7 @@ textarea::placeholder {
 input:focus-visible,
 textarea:focus-visible {
   outline-offset: 0;
+  border-color: var(--ink);
 }
 
 .field {
@@ -209,21 +222,19 @@ textarea:focus-visible {
   align-items: center;
   gap: 2rem;
   padding: 0 var(--gutter);
-  min-height: 6.5rem;
+  min-height: 5rem;
   background: var(--ink);
   color: var(--paper);
-  border-top: 6px solid var(--ink);
-  box-shadow: inset 0 2px 0 var(--paper);
 }
 
 .band .brand {
-  font-size: 2rem;
-  gap: 1rem;
+  font-size: 1.5rem;
+  gap: 0.875rem;
 }
 
 .band .brand img {
-  width: 3.5rem;
-  height: 3.5rem;
+  width: 2.75rem;
+  height: 2.75rem;
 }
 
 .band-nav {
@@ -241,26 +252,124 @@ textarea:focus-visible {
 }
 
 .first {
-  min-height: calc(100svh - 6.5rem);
+  min-height: calc(100svh - 5rem);
   display: grid;
   grid-template-columns: minmax(0, 1fr);
   grid-template-rows: 1fr auto auto;
 }
 
 .hero {
-  padding: clamp(2rem, 4vh, 4.5rem) var(--gutter) clamp(1.5rem, 3vh, 3rem);
+  padding: clamp(1.5rem, 3.5vh, 4rem) var(--gutter) clamp(1.25rem, 2.5vh, 2.5rem);
   display: grid;
   grid-template-columns: minmax(0, 1fr);
   align-content: center;
-  gap: 1.5rem;
+  align-items: center;
+  gap: 2rem clamp(2rem, 5vw, 5rem);
+}
+
+.hero-copy {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr);
+  gap: 1.25rem;
+  min-width: 0;
 }
 
 .hero h1 {
   /* Sized by width and height, so the first viewport holds on short and tall screens. */
-  font-size: clamp(2.5rem, min(6vw, 9.5vh), 7.5rem);
-  letter-spacing: -0.04em;
-  line-height: 0.95;
-  font-weight: 800;
+  font-size: clamp(2.25rem, min(4.6vw, 8vh), 6rem);
+  letter-spacing: -0.035em;
+  line-height: 1;
+  max-width: 13em;
+}
+
+@media (min-width: 1100px) {
+  .hero {
+    grid-template-columns: minmax(0, 1.15fr) minmax(24rem, 0.85fr);
+  }
+}
+
+/* The live request log: what this server answered, and how long it took inside. */
+.wire {
+  min-width: 0;
+  display: grid;
+  gap: 0.75rem;
+  padding: 1.25rem 1.5rem 0.75rem;
+  background: var(--ink);
+  color: var(--paper);
+  border-radius: var(--radius);
+}
+
+.wire-head {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 0.25rem 1rem;
+}
+
+.wire-head h2 {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.625rem;
+  font-size: 1rem;
+  letter-spacing: 0;
+}
+
+.wire-note {
+  color: var(--mute-dark);
+  font-size: 0.8125rem;
+}
+
+.wire-rows {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+  font-family: var(--mono);
+  font-size: 0.875rem;
+  font-variant-numeric: tabular-nums;
+}
+
+.wire-rows li {
+  display: grid;
+  grid-template-columns: 4.25rem minmax(0, 1fr) 2.75rem 5.5rem;
+  gap: 0.75rem;
+  align-items: baseline;
+  padding: 0.5rem 0;
+  border-top: 1px solid var(--line-dark);
+}
+
+.wire-rows .m {
+  font-weight: 700;
+}
+
+.wire-rows .r {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.wire-rows .s,
+.wire-rows .t {
+  color: var(--mute-dark);
+  text-align: right;
+}
+
+.wire-rows li.fresh {
+  animation: arrive 420ms cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.wire-rows li.fresh .r {
+  color: var(--paper);
+}
+
+.wire-empty {
+  color: var(--mute-dark);
+  font-family: var(--sans);
+}
+
+@keyframes arrive {
+  from { opacity: 0; transform: translateY(-0.5rem); }
+  to { opacity: 1; transform: none; }
 }
 
 .lede {
@@ -284,6 +393,9 @@ textarea:focus-visible {
   display: inline-flex;
   min-width: 0;
   align-items: stretch;
+  overflow: hidden;
+  background: var(--paper);
+  border-radius: var(--radius-sm);
   border: 2px solid var(--ink);
   min-height: 3rem;
   max-width: 100%;
@@ -532,7 +644,7 @@ textarea:focus-visible {
   display: grid;
   grid-template-columns: minmax(0, 22rem) minmax(0, 1fr);
   gap: 1.5rem clamp(2rem, 5vw, 5rem);
-  border-bottom: 2px solid var(--ink);
+  border-bottom: 1px solid var(--line);
 }
 
 .section:last-child {
@@ -578,6 +690,7 @@ pre {
   padding: 1.5rem;
   background: var(--ink);
   color: var(--paper);
+  border-radius: var(--radius);
   overflow-x: auto;
   font-family: var(--mono);
   font-size: 0.9375rem;
@@ -595,7 +708,10 @@ pre::selection {
   margin: 0;
   display: grid;
   grid-template-columns: minmax(7.5rem, max-content) minmax(0, 1fr);
-  border-top: 2px solid var(--ink);
+  align-self: start;
+  padding: 0.25rem 1.5rem;
+  background: var(--paper);
+  border-radius: var(--radius);
 }
 
 .spec dt,
@@ -663,8 +779,6 @@ pre::selection {
   padding: 1.25rem 1rem 1.25rem 1.25rem;
   background: var(--ink);
   color: var(--paper);
-  border-top: 6px solid var(--ink);
-  box-shadow: inset 0 2px 0 var(--paper);
   overflow-y: auto;
 }
 
@@ -783,7 +897,7 @@ pre::selection {
   align-items: baseline;
   gap: 0.5rem 1rem;
   padding: 1.75rem var(--gutter) 1.25rem;
-  border-bottom: 2px solid var(--ink);
+  border-bottom: 1px solid var(--line);
 }
 
 .bar h1 {
@@ -819,7 +933,8 @@ pre::selection {
   padding: 0.5rem 1rem;
   background: var(--ink);
   color: var(--paper);
-  font-weight: 700;
+  font-weight: 600;
+  border-radius: var(--radius-sm);
 }
 
 .flash:empty {
@@ -831,8 +946,9 @@ pre::selection {
   grid-template-columns: minmax(10rem, 1fr) minmax(12rem, 2fr) auto;
   gap: 0.75rem;
   align-items: end;
-  padding-top: 1.25rem;
-  border-top: 2px solid var(--ink);
+  padding: 1.25rem;
+  background: var(--paper);
+  border-radius: var(--radius);
 }
 
 .composer .plate {
@@ -841,6 +957,9 @@ pre::selection {
 
 .table-wrap {
   overflow-x: auto;
+  padding: 0 1.25rem;
+  background: var(--paper);
+  border-radius: var(--radius);
 }
 
 table {
@@ -862,8 +981,8 @@ th {
   font-weight: 700;
   letter-spacing: 0.02em;
   text-transform: uppercase;
-  border-top: 2px solid var(--ink);
-  border-bottom: 2px solid var(--ink);
+  color: var(--mute);
+  border-bottom: 1px solid var(--line);
   white-space: nowrap;
 }
 
@@ -896,8 +1015,8 @@ td.act form {
   appearance: none;
   min-height: 2.25rem;
   padding: 0 0.875rem;
-  border: 2px solid var(--ink);
-  border-radius: 0;
+  border: 1px solid var(--control-line);
+  border-radius: var(--radius-sm);
   background: var(--paper);
   color: var(--ink);
   font: inherit;
@@ -913,8 +1032,9 @@ td.empty {
 
 .tag {
   display: inline-block;
-  padding: 0 0.5rem;
-  border: 2px solid var(--ink);
+  padding: 0.0625rem 0.5rem;
+  border-radius: 999px;
+  border: 1px solid var(--ink);
   font-size: 0.8125rem;
   font-weight: 700;
 }
@@ -929,7 +1049,9 @@ td.empty {
   display: grid;
   grid-template-columns: 8rem 1fr;
   max-width: 40rem;
-  border-top: 2px solid var(--ink);
+  padding: 0.25rem 1.5rem;
+  background: var(--paper);
+  border-radius: var(--radius);
 }
 
 .meta dt,
@@ -977,7 +1099,10 @@ td.empty {
 .locked {
   display: grid;
   gap: 0.75rem;
+  padding: 0 1.25rem;
   color: var(--mute);
+  background: var(--paper);
+  border-radius: var(--radius);
 }
 
 .locked th {
@@ -1086,8 +1211,8 @@ td.closed .disc {
     clip-path: inset(50%);
   }
 
-  .table-wrap table {
-    border-top: 2px solid var(--ink);
+  .table-wrap tr:last-child {
+    border-bottom: 0;
   }
 
   .table-wrap tr {
@@ -1159,6 +1284,10 @@ td.closed .disc {
     display: none;
   }
 
+  .band > form {
+    margin-left: auto;
+  }
+
   .band .plate {
     margin-left: auto;
     padding: 0 0.875rem;
@@ -1195,6 +1324,10 @@ td.closed .disc {
   }
 
   .line .rider {
+    display: none;
+  }
+
+  .wire-rows li:nth-child(n + 6) {
     display: none;
   }
 
@@ -1236,8 +1369,7 @@ td.closed .disc {
     gap: 0;
     padding: 0 env(safe-area-inset-right) env(safe-area-inset-bottom) env(safe-area-inset-left);
     background: var(--ink);
-    border-top: 6px solid var(--ink);
-    box-shadow: inset 0 2px 0 var(--paper);
+    border-top: 1px solid var(--line-dark);
   }
 
   .rail-link {
@@ -1308,6 +1440,18 @@ td.closed .disc {
 
   .actions .plate {
     justify-content: space-between;
+  }
+
+  .wire {
+    padding: 1rem 1rem 0.5rem;
+  }
+
+  .wire-rows li {
+    grid-template-columns: 3.25rem minmax(0, 1fr) 4.75rem;
+  }
+
+  .wire-rows .s {
+    display: none;
   }
 
   /* The spec list reads as term over description. */
@@ -1404,6 +1548,10 @@ td.closed .disc {
 
   html {
     font-size: 11pt;
+  }
+
+  body {
+    background: var(--paper);
   }
 
   .band,

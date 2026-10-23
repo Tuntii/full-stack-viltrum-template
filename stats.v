@@ -25,6 +25,54 @@ fn (h &Hits) count() u64 {
 	return stdatomic.load_u64(&h.n)
 }
 
+// Served is one line of the live request log on the landing page.
+struct Served {
+	seq    u64
+	method string
+	route  string
+	status int
+	us     i64
+}
+
+// ReqLog keeps the last few requests this server answered, newest last.
+struct ReqLog {
+mut:
+	seq  u64
+	rows []Served
+}
+
+const log_rows = 9
+
+fn (mut l ReqLog) add(method string, path string, status int, us i64) {
+	l.seq++
+	l.rows << Served{
+		seq:    l.seq
+		method: method.clone()
+		route:  route_of(path, status)
+		status: status
+		us:     us
+	}
+	if l.rows.len > log_rows {
+		l.rows.delete(0)
+	}
+}
+
+// route_of keeps ids and whatever a scanner probes out of a public log: numeric
+// segments become :id, and paths with no route are not shown.
+fn route_of(path string, status int) string {
+	if status == 404 {
+		return '(no route)'
+	}
+	mut parts := path.split('/')
+	for i, p in parts {
+		if p.len > 0 && p.bytes().all(it.is_digit()) {
+			parts[i] = ':id'
+		}
+	}
+	r := parts.join('/')
+	return if r.len > 40 { r[..40] + '...' } else { r }
+}
+
 // ProcessFacts is also the JSON of GET /api/v1/stats, which the pages poll.
 struct ProcessFacts {
 	version  string
@@ -35,9 +83,10 @@ struct ProcessFacts {
 	requests u64
 	items    int
 	users    int
+	recent   []Served
 }
 
-fn process_facts(hits &Hits, items int, users int) ProcessFacts {
+fn process_facts(hits &Hits, items int, users int, recent []Served) ProcessFacts {
 	secs := (time.sys_mono_now() - started_at) / i64(time.second)
 	return ProcessFacts{
 		version:  viltrum.version
@@ -48,6 +97,7 @@ fn process_facts(hits &Hits, items int, users int) ProcessFacts {
 		requests: hits.count()
 		items:    items
 		users:    users
+		recent:   recent
 	}
 }
 
@@ -69,12 +119,16 @@ fn uptime_text(secs i64) string {
 }
 
 // live_facts reads the store's counts and this process's facts in one call.
-fn live_facts(shared store Store, hits &Hits) ProcessFacts {
+fn live_facts(shared store Store, hits &Hits, shared reqlog ReqLog) ProcessFacts {
 	mut items := 0
 	mut users := 0
 	rlock store {
 		items = store.items.len
 		users = store.users.len
 	}
-	return process_facts(hits, items, users)
+	mut recent := []Served{}
+	rlock reqlog {
+		recent = reqlog.rows.clone()
+	}
+	return process_facts(hits, items, users, recent)
 }

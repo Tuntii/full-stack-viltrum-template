@@ -1,6 +1,6 @@
 ---
 name: Viltrum demo and full-stack template
-description: A request's trip through Viltrum, signed like a transit line, in the logo's black and white.
+description: A request's trip through Viltrum, signed like a transit line, in the logo's graphite and white on a soft field.
 colors:
   signage-black: "#141518"
   field-white: "#ffffff"
@@ -8,48 +8,52 @@ colors:
   night-gray: "#a3a3a3"
   hairline: "#d6d6d6"
   wash: "#f2f2f2"
+  soft-field: "#f2f3f5"
+  card-line: "#dfe1e5"
+  control-line: "#b9bcc2"
+  graphite-line: "#2a2c31"
 typography:
   display:
-    fontFamily: "Helvetica Neue, Helvetica, Nimbus Sans, Arial, sans-serif"
+    fontFamily: "Segoe UI Variable Display, SF Pro Display, system-ui, -apple-system, Segoe UI, Roboto, Helvetica Neue, Arial, sans-serif"
     fontSize: "clamp(2.5rem, min(6vw, 9.5vh), 7.5rem)"
     fontWeight: 800
     lineHeight: 0.95
     letterSpacing: "-0.04em"
   headline:
-    fontFamily: "Helvetica Neue, Helvetica, Nimbus Sans, Arial, sans-serif"
+    fontFamily: "system-ui, -apple-system, Segoe UI, Roboto, Helvetica Neue, Arial, sans-serif"
     fontSize: "clamp(1.875rem, 3.4vw, 3rem)"
     fontWeight: 700
     lineHeight: 1.1
     letterSpacing: "-0.035em"
   title:
-    fontFamily: "Helvetica Neue, Helvetica, Nimbus Sans, Arial, sans-serif"
+    fontFamily: "system-ui, -apple-system, Segoe UI, Roboto, Helvetica Neue, Arial, sans-serif"
     fontSize: "2.25rem"
     fontWeight: 700
     lineHeight: 1.1
     letterSpacing: "-0.03em"
   station:
-    fontFamily: "Helvetica Neue, Helvetica, Nimbus Sans, Arial, sans-serif"
+    fontFamily: "system-ui, -apple-system, Segoe UI, Roboto, Helvetica Neue, Arial, sans-serif"
     fontSize: "1.5rem"
     fontWeight: 700
     lineHeight: 1.1
     letterSpacing: "-0.02em"
   lede:
-    fontFamily: "Helvetica Neue, Helvetica, Nimbus Sans, Arial, sans-serif"
+    fontFamily: "system-ui, -apple-system, Segoe UI, Roboto, Helvetica Neue, Arial, sans-serif"
     fontSize: "clamp(1.125rem, 1.6vw, 1.375rem)"
     fontWeight: 400
     lineHeight: 1.45
   body:
-    fontFamily: "Helvetica Neue, Helvetica, Nimbus Sans, Arial, sans-serif"
+    fontFamily: "system-ui, -apple-system, Segoe UI, Roboto, Helvetica Neue, Arial, sans-serif"
     fontSize: "1rem"
     fontWeight: 400
     lineHeight: 1.5
   label:
-    fontFamily: "Helvetica Neue, Helvetica, Nimbus Sans, Arial, sans-serif"
+    fontFamily: "system-ui, -apple-system, Segoe UI, Roboto, Helvetica Neue, Arial, sans-serif"
     fontSize: "0.875rem"
     fontWeight: 700
     lineHeight: 1.5
   column-head:
-    fontFamily: "Helvetica Neue, Helvetica, Nimbus Sans, Arial, sans-serif"
+    fontFamily: "system-ui, -apple-system, Segoe UI, Roboto, Helvetica Neue, Arial, sans-serif"
     fontSize: "0.8125rem"
     fontWeight: 700
     letterSpacing: "0.02em"
@@ -61,6 +65,9 @@ typography:
     fontFeature: "tnum"
 rounded:
   none: "0"
+  sm: "8px"
+  md: "12px"
+  pill: "999px"
   disc: "50%"
 spacing:
   xxs: "0.25rem"
@@ -154,16 +161,17 @@ components:
 
 **Creative North Star: "The Transit Line"**
 
-Every surface is signage for a request's trip through Viltrum. Black bands and a black rail carry the identity the way a station sign does; the white field below is where the reading happens. The logo's disc-and-V is the system's bullet: a filled white disc means "here", an outlined disc means "elsewhere", a barred disc means "closed". A single 6px black rule is the line itself; it runs across the landing's first viewport, then turns and runs down the left edge past every section, which are its stops.
+Every surface is signage for a request's trip through Viltrum. Graphite bands and a graphite rail carry the identity the way a station sign does; a soft gray field holds white cards where the reading and the work happen. The logo's disc-and-V is the system's bullet: a filled white disc means "here", an outlined disc means "elsewhere", a barred disc means "closed". A single 6px black rule is the line itself; it runs across the landing's first viewport, then turns and runs down the left edge past every section, which are its stops.
 
-The palette is the logo's, nothing more: a soft graphite black, pure white, and grays that only exist to rule lines and step text down. Type is a system grotesk set heavy and tight at sign scale, with monospace reserved for code and measured values. Density is calm: one focal move per view, generous white field, and every number on the page is a live reading from the process serving it. There are no shadows, gradients, hosted fonts, images other than the logo, or color of any kind. The pages are live, not printed: a train runs the line on a timetable with real requests, and the readings refresh while you watch. The black and white palette, the system font stack, and the zero hosted-asset rule are user-pinned decisions, not defaults.
+The palette is the logo's, nothing more: a soft graphite black, white, a soft gray field, and grays that only rule lines and step text down. Type is the platform's own UI face (Segoe UI, SF), bold and tight for headings, with monospace reserved for code and measured values. Every number on the page is a live reading from the process serving it, and the landing's hero is never empty: beside the headline, a graphite panel lists the requests this server just answered and the microseconds each took inside it. There are no shadows, gradients, hosted fonts, images other than the logo, or color of any kind. The pages are live, not printed: a train runs the line on a timetable with real requests, and the readings refresh while you watch. The black and white palette, the system font stack, and the zero hosted-asset rule are user-pinned decisions, not defaults.
 
 **Key Characteristics:**
 - Monochrome: graphite black #141518 and white #fff, grays for rules and secondary text only. Pure #000 read as a void on screen; the graphite keeps the logo's weight without it.
-- Square corners everywhere; the only round shapes are discs (stops, bullets, the logo).
-- 2px black rules for structure, 1px hairlines for rows, 6px black for the line.
-- Interaction is inversion: black becomes white and white becomes black.
-- System grotesk at weight 700 to 800 with negative tracking for headings; mono for code and live values.
+- Rounded where hands touch: 8px on plates, inputs, the clone box, row buttons and the flash; 12px on cards, panels and code blocks; tags are pills. The discs stay the logo's.
+- 1px hairlines for structure and rows; 2px only on plate edges; 6px graphite for the line, which is the one heavy stroke on the page.
+- Interaction is inversion: graphite becomes white and white becomes graphite.
+- The platform UI face at 700 with gentle negative tracking for headings; mono for code and live values.
+- Softened on the user's word (2026-10-23): the first version's pure white field, 2px rules everywhere, square corners and 800 headings read as harsh and empty.
 
 ## Colors
 
@@ -173,7 +181,11 @@ Two signage values and a short gray ladder; color is never used.
 - **Signage Black** (`signage-black`): bands, the dashboard rail, plates, the departure strip, code blocks, the line, all 2px structural rules, body text, and the focus outline on white.
 
 ### Neutral
-- **Field White** (`field-white`): the page field, inverted plates on black, text on black, the focus outline on black, the filled "you are here" disc.
+- **Soft Field** (`soft-field`): the page background on every screen; cards and panels sit on it.
+- **Card Line** (`card-line`): hairlines between sections, under the dashboard bar, under table heads.
+- **Control Line** (`control-line`): the 1px edge of inputs and row buttons at rest; focus darkens it to graphite.
+- **Graphite Line** (`graphite-line`): hairlines on graphite (request log rows, the top of the phone's bottom bar).
+- **Field White** (`field-white`): cards (tables, composer, spec list, account details), inputs, inverted plates on black, text on black, the focus outline on black, the filled "you are here" disc.
 - **Platform Gray** (`platform-gray`): secondary text on white (notes, section prose, descriptions, counts, placeholders, empty states). 7.4:1 on white.
 - **Night Gray** (`night-gray`): secondary text on black (inactive rail links, strip labels, footer text). 8.6:1 on black.
 - **Hairline** (`hairline`): 1px row dividers in tables and definition lists; the border of a disabled plate. Never text.
@@ -186,14 +198,14 @@ Two signage values and a short gray ladder; color is never used.
 
 ## Typography
 
-**Display Font:** Helvetica Neue (with Helvetica, Nimbus Sans, Arial, sans-serif)
-**Body Font:** the same grotesk stack
+**Display Font:** Segoe UI Variable Display or SF Pro Display where present, else the platform UI face (system-ui)
+**Body Font:** system-ui (Segoe UI on Windows, SF on Apple, Roboto or the desktop face on Linux), then Helvetica Neue and Arial
 **Label/Mono Font:** ui-monospace (with SF Mono, Cascadia Mono, Menlo, Consolas, monospace)
 
-**Character:** One sign-shop grotesk carries everything, heavy and tight at sign scale, plain at reading size. Mono marks what the machine says: code, commands, ids, and measured values, always with tabular figures.
+**Character:** The platform's own UI face carries everything: bold and tight at headline size, plain at reading size. It replaced a Helvetica-first stack that fell back to Arial on Windows and read as cheap. Mono marks what the machine says: code, commands, ids, and measured values, always with tabular figures.
 
 ### Hierarchy
-- **Display** (800, clamp 2.5rem to 7.5rem by the smaller of 6vw and 9.5vh, line-height 0.95, -0.04em): the landing headline only; one per page. Sizing by height too keeps the first viewport whole on short laptops and lets it grow on tall screens.
+- **Display** (700, clamp 2.25rem to 6rem by the smaller of 4.6vw and 8vh, line-height 1, -0.035em, max 13em): the landing headline only; one per page. Sizing by height too keeps the first viewport whole on short laptops and lets it grow on tall screens.
 - **Headline** (700, clamp 1.875rem to 3rem, 1.1, -0.035em): landing section titles, one shouting phrase per section.
 - **Title** (700, 2.25rem, 1.1, -0.03em): the dashboard page title in the top bar.
 - **Station** (700, 1.5rem, 1.1, -0.02em): station names on the line.
@@ -207,11 +219,11 @@ Two signage values and a short gray ladder; color is never used.
 ### Named Rules
 **The Machine Voice Rule.** Mono appears only where the text is code or a measured value. Prose, labels, and headings are always the grotesk.
 
-**The Bundled Type Rule.** Fonts come from the operating system. The binary serves no font files and the page loads none from anywhere else.
+**The Bundled Type Rule.** Fonts come from the operating system. The binary serves no font files and the page loads none from anywhere else; the stack names each platform's best UI face instead.
 
 ## Layout
 
-The landing's first viewport is a fixed sequence filling `100svh` below the band: the hero (headline, lede, the action pair, a note), the route (title row with the "Send a request" plate, then the line of five stations in a five-column grid), and the departure strip pinned to the bottom edge. Below the fold the line becomes a 6px left border, inset by the gutter; each section sits on it with a stop disc on the rule, a two-column grid (text up to 22rem, then code or a spec list), and a 2px black rule between sections.
+The landing's first viewport is a fixed sequence filling `100svh` below the band: the hero (from 1100px two columns, 1.15fr and 0.85fr: headline, lede, the action pair and a note beside the live request log; under 1100px the log follows the copy), the route (title row with the "Send a request" plate, then the line of five stations in a five-column grid), and the departure strip pinned to the bottom edge. Below the fold the line becomes a 6px left border, inset by the gutter; each section sits on it with a stop disc on the rule, a two-column grid (text up to 22rem, then code or a spec list), and a hairline between sections.
 
 The dashboard is a two-column grid: a 15rem sticky black rail and the work column (top bar with a 2px bottom rule, then the pane). Content in the pane stacks with a 1.75rem gap.
 
@@ -232,16 +244,16 @@ Responsive (content-driven):
 Flat. There are no drop shadows and no tonal layering; depth is figure and ground, black on white or white on black. The only `box-shadow` in the system is a structural signage stripe, not elevation: bands and the rail carry a 6px black top border with a 2px white inset line under it, the double rule of a station sign.
 
 ### Named Rules
-**The Flat Sign Rule.** Nothing lifts, glows, or casts. Hierarchy comes from inversion, weight, and rules.
+**The Flat Sign Rule.** Nothing lifts, glows, or casts. Hierarchy comes from inversion, weight, the white card on the soft field, and hairlines.
 
 ## Shapes
 
-Square corners on every rectangle: plates, inputs, tags, code blocks, the clone box, the flash, tables. The disc is the only curve, and it is the logo's: stop discs on the line and section rules (2.25rem with a 6px black border), rail bullets (1rem with a 3px border), and the rider (a black disc with a white core). A disc with a diagonal 3px bar through it means a closed or locked destination.
+Rectangles are rounded by role: 8px (`radius-sm`) on what a hand touches (plates, inputs, the clone box, row buttons, the flash), 12px (`radius`) on what holds content (cards, the request log, code blocks), full pills on tags. Discs are the logo's: stop discs on the line and section rules (2.25rem with a 6px black border), rail bullets (1rem with a 3px border), and the rider (a black disc with a white core). A disc with a diagonal 3px bar through it means a closed or locked destination.
 
 Borders come in three weights: 1px hairline for rows, 2px black for every control edge and structural rule, 6px black for the line.
 
 ### Named Rules
-**The Only Curve Rule.** If it is round, it is a disc from the logo's vocabulary. Every other corner is square.
+**The Two Radii Rule.** 8px for controls, 12px for containers, pills for tags, discs for the logo's vocabulary. No other corner.
 
 ## Components
 
@@ -272,6 +284,9 @@ Five stations on a 6px black rule, each an outlined stop disc, a station name, a
 
 ### Live readings
 The departure strip opens with a **Live** mark: a 0.625rem white disc at 55% that beats (scales from 1.9 and flashes to full) each time a fresh reading lands. The pages poll `GET /api/v1/stats` every 5s while visible. The uptime reads as a departure clock (H:MM:SS) and ticks every second between polls, and "requests served" counts every request since start, across all workers. The dashboard rail carries the same pulse and readings in a 0.8125rem status line above the signed-in email; it is hidden on phones. Values are server-rendered first, so the pages are complete without JavaScript.
+
+### Request log
+The hero's second column: a graphite card (12px radius) titled "Requests on this server" with the live pulse, noting that times are measured inside the server. Rows are mono with tabular figures: method (bold), route, status, and microseconds, newest on top, nine at most (five on phones, where the status column drops). New rows slide in over 420ms. Routes are public, so ids become `:id`, unmatched paths read "(no route)", and the pages' own `/api/v1/stats` polling is left out; the train's health requests are in it, so each run of the line appears as a row.
 
 ### Departure Strip
 A black band across the bottom of the first viewport: night-gray labels with white bold mono values, all read from the running process. Values are live or absent, never sample data.

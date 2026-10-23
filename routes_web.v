@@ -3,20 +3,21 @@ module main
 // Browser pages: SSR with $tmpl + form POSTs + session cookie.
 import viltrum
 
-fn register_web(mut app viltrum.App, shared store Store, hits &Hits) {
+fn register_web(mut app viltrum.App, shared store Store, hits &Hits, shared reqlog ReqLog) {
 	// The landing page introduces Viltrum; its numbers come from this process.
-	app.get('/', fn [shared store, hits] (mut c viltrum.Ctx) {
+	app.get('/', fn [shared store, hits, shared reqlog] (mut c viltrum.Ctx) {
 		signed_in := if _ := require_user(shared store, c) { true } else { false }
-		html(mut c, 200, view_landing(signed_in, request_origin(c), live_facts(shared store, hits)))
+		html(mut c, 200, view_landing(signed_in, request_origin(c), live_facts(shared store, hits, shared
+			reqlog)))
 	})
 
-	app.get('/login', fn [shared store, hits] (mut c viltrum.Ctx) {
+	app.get('/login', fn [shared store, hits, shared reqlog] (mut c viltrum.Ctx) {
 		if _ := require_user(shared store, c) {
 			redirect(mut c, '/items')
 			return
 		}
 		flash := c.query_param('error') or { '' }
-		html(mut c, 200, view_login(flash, live_facts(shared store, hits)))
+		html(mut c, 200, view_login(flash, live_facts(shared store, hits, shared reqlog)))
 	})
 
 	app.post('/login', fn [shared store] (mut c viltrum.Ctx) {
@@ -48,7 +49,7 @@ fn register_web(mut app viltrum.App, shared store Store, hits &Hits) {
 		redirect(mut c, '/login')
 	})
 
-	app.get('/items', fn [shared store, hits] (mut c viltrum.Ctx) {
+	app.get('/items', fn [shared store, hits, shared reqlog] (mut c viltrum.Ctx) {
 		u := require_user(shared store, c) or {
 			redirect(mut c, '/login')
 			return
@@ -59,7 +60,7 @@ fn register_web(mut app viltrum.App, shared store Store, hits &Hits) {
 			items = store.items_for(u)
 		}
 		html(mut c, 200, view_items(page_for(u, 'Items', 'items', flash, live_facts(shared store,
-			hits)), items))
+			hits, shared reqlog)), items))
 	})
 
 	app.post('/items', fn [shared store] (mut c viltrum.Ctx) {
@@ -104,7 +105,7 @@ fn register_web(mut app viltrum.App, shared store Store, hits &Hits) {
 		redirect(mut c, '/items?flash=${flash}')
 	})
 
-	app.get('/users', fn [shared store, hits] (mut c viltrum.Ctx) {
+	app.get('/users', fn [shared store, hits, shared reqlog] (mut c viltrum.Ctx) {
 		u := require_user(shared store, c) or {
 			redirect(mut c, '/login')
 			return
@@ -117,17 +118,17 @@ fn register_web(mut app viltrum.App, shared store Store, hits &Hits) {
 		rlock store {
 			users = store.all_users()
 		}
-		html(mut c, 200, view_users(page_for(u, 'Users', 'users', '',
-			live_facts(shared store, hits)), users))
+		html(mut c, 200, view_users(page_for(u, 'Users', 'users', '', live_facts(shared store,
+			hits, shared reqlog)), users))
 	})
 
-	app.get('/account', fn [shared store, hits] (mut c viltrum.Ctx) {
+	app.get('/account', fn [shared store, hits, shared reqlog] (mut c viltrum.Ctx) {
 		u := require_user(shared store, c) or {
 			redirect(mut c, '/login')
 			return
 		}
 		role := if u.is_superuser { 'superuser' } else { 'user' }
 		html(mut c, 200, view_account(page_for(u, 'Account', 'account', '', live_facts(shared store,
-			hits)), u.id, html_escape(u.full_name), role))
+			hits, shared reqlog)), u.id, html_escape(u.full_name), role))
 	})
 }

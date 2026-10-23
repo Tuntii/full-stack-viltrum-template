@@ -39,7 +39,7 @@ fn login_input(mut c viltrum.Ctx) LoginIn {
 	return decode_body[LoginIn](c) or { LoginIn{} }
 }
 
-fn register_api(mut api viltrum.Group, shared store Store, hits &Hits) {
+fn register_api(mut api viltrum.Group, shared store Store, hits &Hits, shared reqlog ReqLog) {
 	api.get('/health', fn (mut c viltrum.Ctx) {
 		c.json(200, Health{
 			status: 'ok'
@@ -47,9 +47,9 @@ fn register_api(mut api viltrum.Group, shared store Store, hits &Hits) {
 	})
 
 	// The live pages poll this for their departure strip and status line.
-	api.get('/stats', fn [shared store, hits] (mut c viltrum.Ctx) {
+	api.get('/stats', fn [shared store, hits, shared reqlog] (mut c viltrum.Ctx) {
 		c.set_header('Cache-Control', 'no-store')
-		c.json(200, live_facts(shared store, hits))
+		c.json(200, live_facts(shared store, hits, shared reqlog))
 	})
 
 	api.post('/login/access-token', fn [shared store] (mut c viltrum.Ctx) {

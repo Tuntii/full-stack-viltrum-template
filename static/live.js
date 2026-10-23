@@ -47,6 +47,7 @@
     });
     Promise.all([req, arrive]).then(function (r) {
       out.textContent = r[0];
+      poll(); // the train's own request shows up in the log
       if (manual && said) said.textContent = 'Round trip: ' + r[0];
       if (send) send.disabled = false;
       busy = false;
@@ -84,12 +85,50 @@
   }
   if (fields.requests) set('requests', Number(fields.requests[0].textContent).toLocaleString('en-US'));
 
+  // The request log: newest first; rows the page has not shown yet slide in.
+  var wire = document.getElementById('wire-rows');
+  var seen = 0;
+  if (wire) {
+    wire.querySelectorAll('[data-seq]').forEach(function (li) {
+      seen = Math.max(seen, Number(li.getAttribute('data-seq')));
+    });
+  }
+
+  function cell(cls, text) {
+    var s = document.createElement('span');
+    s.className = cls;
+    s.textContent = text;
+    return s;
+  }
+
+  function renderWire(rows) {
+    if (!wire || !rows || !rows.length) return;
+    var frag = document.createDocumentFragment();
+    var top = seen;
+    for (var i = rows.length - 1; i >= 0; i--) {
+      var r = rows[i];
+      var li = document.createElement('li');
+      li.setAttribute('data-seq', r.seq);
+      if (r.seq > seen) li.className = 'fresh';
+      li.appendChild(cell('m', r.method));
+      li.appendChild(cell('r', r.route));
+      li.appendChild(cell('s', String(r.status)));
+      li.appendChild(cell('t', r.us + ' µs'));
+      frag.appendChild(li);
+      top = Math.max(top, r.seq);
+    }
+    if (top === seen) return;
+    seen = top;
+    wire.replaceChildren(frag);
+  }
+
   function poll() {
     if (document.hidden) return;
     fetch('/api/v1/stats', { cache: 'no-store' }).then(function (res) {
       return res.ok ? res.json() : null;
     }).then(function (f) {
       if (!f) return;
+      renderWire(f.recent);
       base = { s: f.uptime_s, at: Date.now() };
       set('uptime', clock(f.uptime_s));
       set('requests', f.requests.toLocaleString('en-US'));
@@ -103,8 +142,8 @@
     }, function () {});
   }
 
-  if (Object.keys(fields).length) {
-    setInterval(poll, POLL_MS);
+  if (Object.keys(fields).length || wire) {
+    setInterval(poll, wire ? 3000 : POLL_MS);
     document.addEventListener('visibilitychange', function () { if (!document.hidden) poll(); });
   }
 

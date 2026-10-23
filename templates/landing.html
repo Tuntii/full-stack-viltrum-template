@@ -6,7 +6,7 @@
   <title>Viltrum · HTTP framework for V</title>
   <meta name="description" content="Viltrum is an HTTP framework for V with its own HTTP/1.1 engine. This page and its demo dashboard are served by it." />
   <link rel="icon" href="/static/logo.svg" type="image/svg+xml" />
-  <link rel="stylesheet" href="/static/style.css?v=4" />
+  <link rel="stylesheet" href="/static/style.css?v=5" />
 </head>
 <body>
   <header class="band">
@@ -20,16 +20,25 @@
   <main>
     <div class="first">
       <section class="hero">
-        <h1>You write routes.<br />Viltrum owns the wire.</h1>
-        <p class="lede">An HTTP framework for V with its own HTTP/1.1 engine: one epoll worker per CPU, pipelining, no allocation per request inside the framework, and no third-party code underneath.</p>
-        <div class="actions">
-          @{hero_action}
-          <div class="clone">
-            <code id="clone-cmd">git clone https://github.com/Tuntii/viltrum.git</code>
-            <button type="button" data-copy="clone-cmd" hidden>Copy</button>
+        <div class="hero-copy">
+          <h1>You write routes. Viltrum owns the wire.</h1>
+          <p class="lede">An HTTP framework for V with its own HTTP/1.1 engine: one epoll worker per CPU, pipelining, no allocation per request inside the framework, and no third-party code underneath.</p>
+          <div class="actions">
+            @{hero_action}
+            <div class="clone">
+              <code id="clone-cmd">git clone https://github.com/Tuntii/viltrum.git</code>
+              <button type="button" data-copy="clone-cmd" hidden>Copy</button>
+            </div>
           </div>
+          <p class="note">@{hero_note}</p>
         </div>
-        <p class="note">@{hero_note}</p>
+        <aside class="wire" aria-labelledby="wire-title">
+          <div class="wire-head">
+            <h2 id="wire-title"><span class="pulse" aria-hidden="true"></span>Requests on this server</h2>
+            <span class="wire-note">time inside the server</span>
+          </div>
+          <ol class="wire-rows" id="wire-rows">@{recent_rows}</ol>
+        </aside>
       </section>
 
       <section class="route" aria-labelledby="route-title">
@@ -123,6 +132,6 @@ curl -s -X POST @{origin}/api/v1/login/access-token \
     <a href="https://github.com/Tuntii/viltrum">Source</a>
     <a href="https://http-arena.com/">HttpArena results</a>
   </footer>
-  <script src="/static/live.js?v=4" defer></script>
+  <script src="/static/live.js?v=5" defer></script>
 </body>
 </html>

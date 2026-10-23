@@ -4,45 +4,233 @@
   "title": "Design System: Viltrum demo and full-stack template",
   "extensions": {
     "colorMeta": {
-      "signage-black": { "role": "primary", "displayName": "Signage Black", "canonical": "#141518", "tonalRamp": ["#141518", "#1a1a1a", "#333333", "#555555", "#777777", "#a3a3a3", "#d6d6d6", "#f2f2f2"] },
-      "field-white": { "role": "neutral", "displayName": "Field White", "canonical": "#ffffff", "tonalRamp": ["#262626", "#474747", "#6b6b6b", "#8f8f8f", "#b3b3b3", "#d6d6d6", "#f2f2f2", "#ffffff"] },
-      "platform-gray": { "role": "neutral", "displayName": "Platform Gray", "canonical": "#555555", "tonalRamp": ["#262626", "#3a3a3a", "#555555", "#6e6e6e", "#888888", "#a3a3a3", "#c2c2c2", "#f2f2f2"] },
-      "night-gray": { "role": "neutral", "displayName": "Night Gray", "canonical": "#a3a3a3", "tonalRamp": ["#262626", "#3a3a3a", "#555555", "#6e6e6e", "#888888", "#a3a3a3", "#c2c2c2", "#f2f2f2"] },
-      "hairline": { "role": "neutral", "displayName": "Hairline", "canonical": "#d6d6d6", "tonalRamp": ["#262626", "#3a3a3a", "#555555", "#6e6e6e", "#888888", "#a3a3a3", "#d6d6d6", "#f2f2f2"] },
-      "wash": { "role": "neutral", "displayName": "Wash", "canonical": "#f2f2f2", "tonalRamp": ["#262626", "#3a3a3a", "#555555", "#6e6e6e", "#888888", "#a3a3a3", "#d6d6d6", "#f2f2f2"] }
+      "signage-black": {
+        "role": "primary",
+        "displayName": "Signage Black",
+        "canonical": "#141518",
+        "tonalRamp": [
+          "#141518",
+          "#1a1a1a",
+          "#333333",
+          "#555555",
+          "#777777",
+          "#a3a3a3",
+          "#d6d6d6",
+          "#f2f2f2"
+        ]
+      },
+      "field-white": {
+        "role": "neutral",
+        "displayName": "Field White",
+        "canonical": "#ffffff",
+        "tonalRamp": [
+          "#262626",
+          "#474747",
+          "#6b6b6b",
+          "#8f8f8f",
+          "#b3b3b3",
+          "#d6d6d6",
+          "#f2f2f2",
+          "#ffffff"
+        ]
+      },
+      "platform-gray": {
+        "role": "neutral",
+        "displayName": "Platform Gray",
+        "canonical": "#555555",
+        "tonalRamp": [
+          "#262626",
+          "#3a3a3a",
+          "#555555",
+          "#6e6e6e",
+          "#888888",
+          "#a3a3a3",
+          "#c2c2c2",
+          "#f2f2f2"
+        ]
+      },
+      "night-gray": {
+        "role": "neutral",
+        "displayName": "Night Gray",
+        "canonical": "#a3a3a3",
+        "tonalRamp": [
+          "#262626",
+          "#3a3a3a",
+          "#555555",
+          "#6e6e6e",
+          "#888888",
+          "#a3a3a3",
+          "#c2c2c2",
+          "#f2f2f2"
+        ]
+      },
+      "hairline": {
+        "role": "neutral",
+        "displayName": "Hairline",
+        "canonical": "#d6d6d6",
+        "tonalRamp": [
+          "#262626",
+          "#3a3a3a",
+          "#555555",
+          "#6e6e6e",
+          "#888888",
+          "#a3a3a3",
+          "#d6d6d6",
+          "#f2f2f2"
+        ]
+      },
+      "wash": {
+        "role": "neutral",
+        "displayName": "Wash",
+        "canonical": "#f2f2f2",
+        "tonalRamp": [
+          "#262626",
+          "#3a3a3a",
+          "#555555",
+          "#6e6e6e",
+          "#888888",
+          "#a3a3a3",
+          "#d6d6d6",
+          "#f2f2f2"
+        ]
+      }
     },
     "typographyMeta": {
-      "display": { "displayName": "Display", "purpose": "The landing headline only; one per page." },
-      "headline": { "displayName": "Headline", "purpose": "Landing section titles, one shouting phrase per section." },
-      "title": { "displayName": "Title", "purpose": "Dashboard page title in the top bar." },
-      "station": { "displayName": "Station", "purpose": "Station names on the line." },
-      "lede": { "displayName": "Lede", "purpose": "One sentence under the display line, max 44rem." },
-      "body": { "displayName": "Body", "purpose": "Prose, about 34rem to 40rem per column." },
-      "label": { "displayName": "Label", "purpose": "Field labels above inputs." },
-      "column-head": { "displayName": "Column head", "purpose": "Table header cells only, uppercase." },
-      "mono": { "displayName": "Mono", "purpose": "Code, commands, ids, and live measured values; tabular figures." }
+      "display": {
+        "displayName": "Display",
+        "purpose": "The landing headline only; one per page."
+      },
+      "headline": {
+        "displayName": "Headline",
+        "purpose": "Landing section titles, one shouting phrase per section."
+      },
+      "title": {
+        "displayName": "Title",
+        "purpose": "Dashboard page title in the top bar."
+      },
+      "station": {
+        "displayName": "Station",
+        "purpose": "Station names on the line."
+      },
+      "lede": {
+        "displayName": "Lede",
+        "purpose": "One sentence under the display line, max 44rem."
+      },
+      "body": {
+        "displayName": "Body",
+        "purpose": "Prose, about 34rem to 40rem per column."
+      },
+      "label": {
+        "displayName": "Label",
+        "purpose": "Field labels above inputs."
+      },
+      "column-head": {
+        "displayName": "Column head",
+        "purpose": "Table header cells only, uppercase."
+      },
+      "mono": {
+        "displayName": "Mono",
+        "purpose": "Code, commands, ids, and live measured values; tabular figures."
+      }
     },
     "shadows": [
-      { "name": "signage-stripe", "value": "inset 0 2px 0 #ffffff", "purpose": "Structural, not elevation: with a 6px black top border, the double rule on the landing band and the dashboard rail." }
+      {
+        "name": "signage-stripe",
+        "value": "inset 0 2px 0 #ffffff",
+        "purpose": "Structural, not elevation: with a 6px black top border, the double rule on the landing band and the dashboard rail."
+      }
     ],
     "motion": [
-      { "name": "invert", "value": "120ms ease-out", "purpose": "Background and color swap on plate hover." },
-      { "name": "arrow-nudge", "value": "160ms cubic-bezier(0.16, 1, 0.3, 1)", "purpose": "Plate arrow slides 3px right on hover." },
-      { "name": "ride", "value": "900ms linear", "purpose": "The rider crosses the line; each stop fills at i * 225ms. Removed under reduced motion." },
-      { "name": "depart", "value": "500ms cubic-bezier(0.16, 1, 0.3, 1) after 3200ms", "purpose": "The rider leaves the terminus; the stops fade back over 700ms." },
-      { "name": "timetable", "value": "first run ~1.2s after load, then every 7000ms while visible", "purpose": "The train runs by itself, each run a real GET /api/v1/health." },
-      { "name": "beat", "value": "1400ms cubic-bezier(0.16, 1, 0.3, 1)", "purpose": "The live pulse beats when a fresh /api/v1/stats reading lands (every 5000ms)." }
+      {
+        "name": "invert",
+        "value": "120ms ease-out",
+        "purpose": "Background and color swap on plate hover."
+      },
+      {
+        "name": "arrow-nudge",
+        "value": "160ms cubic-bezier(0.16, 1, 0.3, 1)",
+        "purpose": "Plate arrow slides 3px right on hover."
+      },
+      {
+        "name": "ride",
+        "value": "900ms linear",
+        "purpose": "The rider crosses the line; each stop fills at i * 225ms. Removed under reduced motion."
+      },
+      {
+        "name": "depart",
+        "value": "500ms cubic-bezier(0.16, 1, 0.3, 1) after 3200ms",
+        "purpose": "The rider leaves the terminus; the stops fade back over 700ms."
+      },
+      {
+        "name": "timetable",
+        "value": "first run ~1.2s after load, then every 7000ms while visible",
+        "purpose": "The train runs by itself, each run a real GET /api/v1/health."
+      },
+      {
+        "name": "beat",
+        "value": "1400ms cubic-bezier(0.16, 1, 0.3, 1)",
+        "purpose": "The live pulse beats when a fresh /api/v1/stats reading lands (every 5000ms)."
+      },
+      {
+        "name": "arrive",
+        "value": "420ms cubic-bezier(0.16, 1, 0.3, 1)",
+        "purpose": "A new row slides into the request log."
+      }
     ],
     "breakpoints": [
-      { "name": "rail-narrow", "value": "1100px" },
-      { "name": "stack", "value": "900px" },
-      { "name": "compact", "value": "760px" },
-      { "name": "narrow", "value": "480px" },
-      { "name": "short", "value": "max-height 560px" },
-      { "name": "pane-composer", "value": "container 44rem" },
-      { "name": "pane-stacked-rows", "value": "container 34rem" },
-      { "name": "root-18", "value": "1800px" },
-      { "name": "root-20", "value": "2400px" }
+      {
+        "name": "rail-narrow",
+        "value": "1100px"
+      },
+      {
+        "name": "stack",
+        "value": "900px"
+      },
+      {
+        "name": "compact",
+        "value": "760px"
+      },
+      {
+        "name": "narrow",
+        "value": "480px"
+      },
+      {
+        "name": "short",
+        "value": "max-height 560px"
+      },
+      {
+        "name": "pane-composer",
+        "value": "container 44rem"
+      },
+      {
+        "name": "pane-stacked-rows",
+        "value": "container 34rem"
+      },
+      {
+        "name": "root-18",
+        "value": "1800px"
+      },
+      {
+        "name": "root-20",
+        "value": "2400px"
+      }
+    ],
+    "radii": [
+      {
+        "name": "radius-sm",
+        "value": "8px",
+        "purpose": "Controls: plates, inputs, the clone box, row buttons, the flash."
+      },
+      {
+        "name": "radius",
+        "value": "12px",
+        "purpose": "Containers: cards, the request log, code blocks."
+      },
+      {
+        "name": "pill",
+        "value": "999px",
+        "purpose": "Tags."
+      }
     ]
   },
   "components": [
@@ -130,12 +318,36 @@
       "System grotesk at weight 700 to 800 with negative tracking for headings; mono for code and live values."
     ],
     "rules": [
-      { "name": "The Logo Palette Rule", "body": "Black and white are the identity; grays only rule lines or step text down. No hue, no gradient, no tint enters the system.", "section": "colors" },
-      { "name": "The Inversion Rule", "body": "A state change swaps black and white (hover, current, selected, solid tag). There is no third \"accent\" state color.", "section": "colors" },
-      { "name": "The Machine Voice Rule", "body": "Mono appears only where the text is code or a measured value. Prose, labels, and headings are always the grotesk.", "section": "typography" },
-      { "name": "The Bundled Type Rule", "body": "Fonts come from the operating system. The binary serves no font files and the page loads none from anywhere else.", "section": "typography" },
-      { "name": "The Flat Sign Rule", "body": "Nothing lifts, glows, or casts. Hierarchy comes from inversion, weight, and rules.", "section": "elevation" },
-      { "name": "The Only Curve Rule", "body": "If it is round, it is a disc from the logo's vocabulary. Every other corner is square.", "section": "shapes" }
+      {
+        "name": "The Logo Palette Rule",
+        "body": "Black and white are the identity; grays only rule lines or step text down. No hue, no gradient, no tint enters the system.",
+        "section": "colors"
+      },
+      {
+        "name": "The Inversion Rule",
+        "body": "A state change swaps black and white (hover, current, selected, solid tag). There is no third \"accent\" state color.",
+        "section": "colors"
+      },
+      {
+        "name": "The Machine Voice Rule",
+        "body": "Mono appears only where the text is code or a measured value. Prose, labels, and headings are always the grotesk.",
+        "section": "typography"
+      },
+      {
+        "name": "The Bundled Type Rule",
+        "body": "Fonts come from the operating system. The binary serves no font files and the page loads none from anywhere else.",
+        "section": "typography"
+      },
+      {
+        "name": "The Flat Sign Rule",
+        "body": "Nothing lifts, glows, or casts. Hierarchy comes from inversion, weight, and rules.",
+        "section": "elevation"
+      },
+      {
+        "name": "The Only Curve Rule",
+        "body": "If it is round, it is a disc from the logo's vocabulary. Every other corner is square.",
+        "section": "shapes"
+      }
     ],
     "dos": [
       "**Do** invert black and white for every state change; hover, current, and selected share one move.",
