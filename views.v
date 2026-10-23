@@ -10,6 +10,7 @@ struct PageCtx {
 	is_superuser bool
 	flash        string
 	active       string
+	live         ProcessFacts
 }
 
 // html_escape is for every request- or user-supplied string a page shows: the
@@ -41,10 +42,17 @@ fn rail_html(page PageCtx) string {
 }
 
 fn rail_foot_html(page PageCtx) string {
+	status := live_status(page.live)
 	if page.active == 'login' {
-		return '<p class="who">Not signed in</p><a href="/">About Viltrum</a>'
+		return '${status}<p class="who">Not signed in</p><a href="/">About Viltrum</a>'
 	}
-	return '<p class="who">${page.email}</p><form method="post" action="/logout"><button type="submit" class="plate">Sign out</button></form>'
+	return '${status}<p class="who">${page.email}</p><form method="post" action="/logout"><button type="submit" class="plate">Sign out</button></form>'
+}
+
+// live_status is the server's pulse: a disc that beats on each fresh reading,
+// its clock and its request count. static/live.js keeps the values current.
+fn live_status(f ProcessFacts) string {
+	return '<p class="status"><span class="pulse" aria-hidden="true"></span>Live, up <b data-live="uptime" data-s="${f.uptime_s}">${f.uptime}</b>, <b data-live="requests">${f.requests}</b> requests</p>'
 }
 
 fn plural(n int, word string) string {
@@ -81,7 +89,7 @@ fn render_users_rows(users []User) string {
 	return b
 }
 
-fn view_landing(signed_in bool, origin string, facts ProcessFacts, items int, users int) string {
+fn view_landing(signed_in bool, origin string, facts ProcessFacts) string {
 	// One click signs in as the seeded demo admin: the action a visitor came for.
 	band_action := demo_action(signed_in, 'Open the dashboard', 'Dashboard')
 	hero_action := demo_action(signed_in, 'Open the live dashboard', 'Open the live dashboard')
@@ -90,8 +98,12 @@ fn view_landing(signed_in bool, origin string, facts ProcessFacts, items int, us
 	} else {
 		'Signs you in as admin@example.com. Everything lives in memory.'
 	}
-	rss_fact := if facts.rss != '' { '<span>resident <b>${facts.rss}</b></span>' } else { '' }
-	store_fact := '${plural(items, 'item')}, ${plural(users, 'user')}'
+	rss_fact := if facts.rss != '' {
+		'<span>resident <b data-live="rss">${facts.rss}</b></span>'
+	} else {
+		''
+	}
+	store_fact := '${plural(facts.items, 'item')}, ${plural(facts.users, 'user')}'
 	return $tmpl('templates/landing.html')
 }
 
@@ -108,15 +120,16 @@ fn demo_action(signed_in bool, label string, short string) string {
 	return '<form method="post" action="/login"><input type="hidden" name="email" value="admin@example.com" /><input type="hidden" name="password" value="changethis" /><button type="submit" class="plate">${text} ${arrow_svg}</button></form>'
 }
 
-fn view_login(flash string, items int, users int) string {
+fn view_login(flash string, facts ProcessFacts) string {
 	page := PageCtx{
 		title:  'Sign in'
 		flash:  html_escape(flash)
 		active: 'login'
+		live:   facts
 	}
 	rail := rail_html(page)
 	rail_foot := rail_foot_html(page)
-	behind := '${plural(items, 'item')} and ${plural(users, 'user')} in memory. Sign in to open them.'
+	behind := '${plural(facts.items, 'item')} and ${plural(facts.users, 'user')} in memory. Sign in to open them.'
 	return $tmpl('templates/login.html')
 }
 
@@ -142,12 +155,13 @@ fn view_account(page PageCtx, user_id int, full_name string, role string) string
 	return $tmpl('templates/account.html')
 }
 
-fn page_for(u User, title string, active string, flash string) PageCtx {
+fn page_for(u User, title string, active string, flash string, live ProcessFacts) PageCtx {
 	return PageCtx{
 		title:        title
 		email:        html_escape(u.email)
 		is_superuser: u.is_superuser
 		flash:        html_escape(flash)
 		active:       active
+		live:         live
 	}
 }

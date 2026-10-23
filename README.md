@@ -50,7 +50,7 @@ Serving needs Linux (Viltrum's engine is epoll): on Windows use WSL2, on macOS a
   routes_web.v      # browser pages + forms
   routes_api.v      # /api/v1 JSON
   templates/        # HTML shells (V $tmpl)
-  static/           # style.css, landing.js (a few lines), logo.svg
+  static/           # style.css, live.js (live readings, the train), logo.svg
   scripts/setup.sh
 ```
 
@@ -72,6 +72,7 @@ Swap `store.v` for a real database later; keep handlers thin.
 | Method | Path | Auth |
 |--------|------|------|
 | GET | `/api/v1/health` | no |
+| GET | `/api/v1/stats` | no (live process facts for the pages) |
 | POST | `/api/v1/login/access-token` | no → bearer token |
 | POST | `/api/v1/logout` | yes |
 | GET | `/api/v1/users/me` | yes |

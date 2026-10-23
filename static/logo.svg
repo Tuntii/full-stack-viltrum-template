@@ -1,10 +1,10 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" width="512" height="512" role="img" aria-label="Viltrum">
   <title>Viltrum</title>
-  <rect width="512" height="512" fill="#000000"/>
+  <rect width="512" height="512" fill="#141518"/>
   <circle cx="256" cy="256" r="200" fill="#ffffff"/>
   <!-- Architectural V: constant-width bars, open top, sharp join -->
-  <path fill="#000000" d="
+  <path fill="#141518" d="
     M 142 150
     L 198 150
     L 256 318

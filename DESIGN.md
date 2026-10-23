@@ -2,7 +2,7 @@
 name: Viltrum demo and full-stack template
 description: A request's trip through Viltrum, signed like a transit line, in the logo's black and white.
 colors:
-  signage-black: "#000000"
+  signage-black: "#141518"
   field-white: "#ffffff"
   platform-gray: "#555555"
   night-gray: "#a3a3a3"
@@ -156,10 +156,10 @@ components:
 
 Every surface is signage for a request's trip through Viltrum. Black bands and a black rail carry the identity the way a station sign does; the white field below is where the reading happens. The logo's disc-and-V is the system's bullet: a filled white disc means "here", an outlined disc means "elsewhere", a barred disc means "closed". A single 6px black rule is the line itself; it runs across the landing's first viewport, then turns and runs down the left edge past every section, which are its stops.
 
-The palette is the logo's, nothing more: pure black, pure white, and grays that only exist to rule lines and step text down. Type is a system grotesk set heavy and tight at sign scale, with monospace reserved for code and measured values. Density is calm: one focal move per view, generous white field, and every number on the page is a live reading from the process serving it. There are no shadows, gradients, hosted fonts, images other than the logo, or color of any kind. The black and white palette, the system font stack, and the zero hosted-asset rule are user-pinned decisions, not defaults.
+The palette is the logo's, nothing more: a soft graphite black, pure white, and grays that only exist to rule lines and step text down. Type is a system grotesk set heavy and tight at sign scale, with monospace reserved for code and measured values. Density is calm: one focal move per view, generous white field, and every number on the page is a live reading from the process serving it. There are no shadows, gradients, hosted fonts, images other than the logo, or color of any kind. The pages are live, not printed: a train runs the line on a timetable with real requests, and the readings refresh while you watch. The black and white palette, the system font stack, and the zero hosted-asset rule are user-pinned decisions, not defaults.
 
 **Key Characteristics:**
-- Monochrome: black #000 and white #fff, grays for rules and secondary text only.
+- Monochrome: graphite black #141518 and white #fff, grays for rules and secondary text only. Pure #000 read as a void on screen; the graphite keeps the logo's weight without it.
 - Square corners everywhere; the only round shapes are discs (stops, bullets, the logo).
 - 2px black rules for structure, 1px hairlines for rows, 6px black for the line.
 - Interaction is inversion: black becomes white and white becomes black.
@@ -268,7 +268,10 @@ A plate is a sign: square, solid, one action.
 - **Rail (dashboard):** a sticky 15rem black column. Each link is a 1rem outlined disc and a 1.0625rem bold label in night gray; the current page has a filled white disc and white text; a locked page shows a barred disc and a not-allowed cursor. The foot holds the signed-in email and a full-width white plate. Under 760px the links become a fixed bottom bar of three stops (see Layout).
 
 ### The Line (signature)
-Five stations on a 6px black rule, each an outlined stop disc, a station name, and a one-line platform-gray description. "Send a request" fetches the health endpoint; a black rider disc with a white core travels the rule in 900ms linear while each stop fills black as the rider reaches it, then the measured round trip prints in bold mono at the terminus. With reduced motion there is no ride and the stops fill at once.
+Five stations on a 6px black rule, each an outlined stop disc, a station name, and a one-line platform-gray description. "Send a request" fetches the health endpoint; a black rider disc with a white core travels the rule in 900ms linear while each stop fills black as the rider reaches it, then the measured round trip prints in bold mono at the terminus. The train also runs by itself: about a second after load, then every 7s while the tab is visible, each run a real request. It waits at the terminus for about 3s, then departs (fades 1.5rem past Write) while the stops it lit fade back to outline. Only a press shows the plate as busy and announces the result; the timetable runs quietly. With reduced motion there is no ride: the stops fill at once and stay.
+
+### Live readings
+The departure strip opens with a **Live** mark: a 0.625rem white disc at 55% that beats (scales from 1.9 and flashes to full) each time a fresh reading lands. The pages poll `GET /api/v1/stats` every 5s while visible. The uptime reads as a departure clock (H:MM:SS) and ticks every second between polls, and "requests served" counts every request since start, across all workers. The dashboard rail carries the same pulse and readings in a 0.8125rem status line above the signed-in email; it is hidden on phones. Values are server-rendered first, so the pages are complete without JavaScript.
 
 ### Departure Strip
 A black band across the bottom of the first viewport: night-gray labels with white bold mono values, all read from the running process. Values are live or absent, never sample data.

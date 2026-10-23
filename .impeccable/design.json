@@ -4,7 +4,7 @@
   "title": "Design System: Viltrum demo and full-stack template",
   "extensions": {
     "colorMeta": {
-      "signage-black": { "role": "primary", "displayName": "Signage Black", "canonical": "#000000", "tonalRamp": ["#000000", "#1a1a1a", "#333333", "#555555", "#777777", "#a3a3a3", "#d6d6d6", "#f2f2f2"] },
+      "signage-black": { "role": "primary", "displayName": "Signage Black", "canonical": "#141518", "tonalRamp": ["#141518", "#1a1a1a", "#333333", "#555555", "#777777", "#a3a3a3", "#d6d6d6", "#f2f2f2"] },
       "field-white": { "role": "neutral", "displayName": "Field White", "canonical": "#ffffff", "tonalRamp": ["#262626", "#474747", "#6b6b6b", "#8f8f8f", "#b3b3b3", "#d6d6d6", "#f2f2f2", "#ffffff"] },
       "platform-gray": { "role": "neutral", "displayName": "Platform Gray", "canonical": "#555555", "tonalRamp": ["#262626", "#3a3a3a", "#555555", "#6e6e6e", "#888888", "#a3a3a3", "#c2c2c2", "#f2f2f2"] },
       "night-gray": { "role": "neutral", "displayName": "Night Gray", "canonical": "#a3a3a3", "tonalRamp": ["#262626", "#3a3a3a", "#555555", "#6e6e6e", "#888888", "#a3a3a3", "#c2c2c2", "#f2f2f2"] },
@@ -28,7 +28,10 @@
     "motion": [
       { "name": "invert", "value": "120ms ease-out", "purpose": "Background and color swap on plate hover." },
       { "name": "arrow-nudge", "value": "160ms cubic-bezier(0.16, 1, 0.3, 1)", "purpose": "Plate arrow slides 3px right on hover." },
-      { "name": "ride", "value": "900ms linear", "purpose": "The rider crosses the line; each stop fills at i * 225ms. Removed under reduced motion." }
+      { "name": "ride", "value": "900ms linear", "purpose": "The rider crosses the line; each stop fills at i * 225ms. Removed under reduced motion." },
+      { "name": "depart", "value": "500ms cubic-bezier(0.16, 1, 0.3, 1) after 3200ms", "purpose": "The rider leaves the terminus; the stops fade back over 700ms." },
+      { "name": "timetable", "value": "first run ~1.2s after load, then every 7000ms while visible", "purpose": "The train runs by itself, each run a real GET /api/v1/health." },
+      { "name": "beat", "value": "1400ms cubic-bezier(0.16, 1, 0.3, 1)", "purpose": "The live pulse beats when a fresh /api/v1/stats reading lands (every 5000ms)." }
     ],
     "breakpoints": [
       { "name": "rail-narrow", "value": "1100px" },

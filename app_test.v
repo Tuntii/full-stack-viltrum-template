@@ -172,3 +172,17 @@ fn test_rail_marks_the_current_page() {
 	assert items.contains('1 item')
 	assert body_of(get(app, '/users', jar)).contains('href="/users" aria-current="page"')
 }
+
+fn test_stats_are_live() {
+	app := demo_app()
+	_ = get(app, '/api/v1/health', '')
+	res := get(app, '/api/v1/stats', '')
+	assert status_of(res) == 200 && header_of(res, 'Cache-Control') == 'no-store'
+	body := body_of(res)
+	assert body.contains('"requests":2,')
+	assert body.contains('"items":1,"users":1')
+	assert uptime_text(3725) == '1:02:05'
+	// the pages render the same readings, marked for live.js
+	assert body_of(get(app, '/', '')).contains('data-live="requests"')
+	assert body_of(get(app, '/login', '')).contains('class="pulse"')
+}

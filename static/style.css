@@ -1,6 +1,6 @@
 /* Viltrum signage: the logo's black and white, square corners, solid rules. */
 :root {
-  --ink: #000;
+  --ink: #141518;
   --paper: #fff;
   --mute: #555;
   --mute-dark: #a3a3a3;
@@ -436,17 +436,30 @@ textarea:focus-visible {
 
 /* 900ms over four gaps: the rider reaches stop i at i * 225ms, when it lights. */
 .line.go .rider {
-  animation: ride 900ms linear forwards;
+  animation:
+    ride 900ms linear forwards,
+    depart 500ms cubic-bezier(0.16, 1, 0.3, 1) 3200ms forwards;
 }
 
 .line.go .stop {
-  animation: lit 1ms linear forwards;
-  animation-delay: calc(var(--i) * 225ms);
+  animation:
+    lit 1ms linear calc(var(--i) * 225ms) forwards,
+    unlit 700ms ease-out calc(3200ms + var(--i) * 60ms) forwards;
 }
 
 @keyframes ride {
   0% { opacity: 1; transform: translateX(0); }
   100% { opacity: 1; transform: translateX(calc(100% * (var(--stops) - 1) / var(--stops))); }
+}
+
+@keyframes depart {
+  from { opacity: 1; transform: translateX(calc(100% * (var(--stops) - 1) / var(--stops))); }
+  to { opacity: 0; transform: translateX(calc(100% * (var(--stops) - 1) / var(--stops) + 1.5rem)); }
+}
+
+@keyframes unlit {
+  from { background: var(--ink); }
+  to { background: var(--paper); }
 }
 
 @keyframes lit {
@@ -463,6 +476,33 @@ textarea:focus-visible {
   background: var(--ink);
   color: var(--paper);
   font-size: 1.25rem;
+}
+
+.strip .live {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  color: var(--paper);
+  font-weight: 700;
+}
+
+.pulse {
+  display: inline-block;
+  flex: none;
+  width: 0.625rem;
+  height: 0.625rem;
+  border-radius: 50%;
+  background: var(--paper);
+  opacity: 0.55;
+}
+
+.pulse.beat {
+  animation: beat 1400ms cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+@keyframes beat {
+  from { opacity: 1; transform: scale(1.9); }
+  to { opacity: 0.55; transform: scale(1); }
 }
 
 .strip span {
@@ -688,6 +728,24 @@ pre::selection {
   padding-top: 1rem;
   border-top: 2px solid var(--mute);
   font-size: 0.875rem;
+}
+
+.rail-foot .status {
+  color: var(--mute-dark);
+  font-size: 0.8125rem;
+  line-height: 1.7;
+}
+
+.rail-foot .status .pulse {
+  margin-right: 0.5rem;
+  vertical-align: 0.0625rem;
+}
+
+.rail-foot .status b {
+  color: var(--paper);
+  font-family: var(--mono);
+  font-weight: 700;
+  font-variant-numeric: tabular-nums;
 }
 
 .rail-foot .who {
@@ -1206,7 +1264,8 @@ td.closed .disc {
     gap: 1rem;
   }
 
-  .rail-foot .who {
+  .rail-foot .who,
+  .rail-foot .status {
     display: none;
   }
 
@@ -1486,11 +1545,12 @@ td.closed .disc {
     transition: none !important;
   }
 
-  .line.go .rider {
+  .line.go .rider,
+  .pulse.beat {
     animation: none;
   }
 
   .line.go .stop {
-    animation-delay: 0ms;
+    animation: lit 1ms linear forwards;
   }
 }

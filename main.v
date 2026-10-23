@@ -36,9 +36,15 @@ fn new_app(shared store Store) &viltrum.App {
 	mut app := viltrum.new()
 	app.use(viltrum.recover)
 	app.use(viltrum.logger)
+	// Every request counts toward "requests served" on the live pages.
+	mut hits := &Hits{}
+	app.use(fn [mut hits] (mut c viltrum.Ctx) {
+		hits.add()
+		c.next()
+	})
 	app.static_files('/static', static_dir, max_age: 3600)
-	register_web(mut app, shared store)
+	register_web(mut app, shared store, hits)
 	mut api := app.group('/api/v1')
-	register_api(mut api, shared store)
+	register_api(mut api, shared store, hits)
 	return app
 }

@@ -42,18 +42,20 @@
           <li><span class="stop" style="--i:1"></span><b>Parse</b><span>In place, no allocation; ambiguous framing gets 400</span></li>
           <li><span class="stop" style="--i:2"></span><b>Route</b><span>:param, *rest, groups, middleware</span></li>
           <li><span class="stop" style="--i:3"></span><b>Handler</b><span>Your fn (mut c Ctx)</span></li>
-          <li><span class="stop" style="--i:4"></span><b>Write</b><span>Pipelined responses batched into one write</span><output id="rtt" aria-live="polite"></output></li>
+          <li><span class="stop" style="--i:4"></span><b>Write</b><span>Pipelined responses batched into one write</span><output id="rtt"></output></li>
           <li class="rider" aria-hidden="true"></li>
         </ol>
+        <p class="sr-only" role="status" id="rtt-status"></p>
       </section>
 
       <p class="strip" aria-label="This server, right now">
-        <span>Serving this page</span>
+        <span class="live"><span class="pulse" aria-hidden="true"></span>Live</span>
         <span>Viltrum <b>@{facts.version}</b></span>
         <span>workers <b>@{facts.workers}</b></span>
         @{rss_fact}
-        <span>up <b>@{facts.uptime}</b></span>
-        <span>in memory <b>@{store_fact}</b></span>
+        <span>up <b data-live="uptime" data-s="@{facts.uptime_s}">@{facts.uptime}</b></span>
+        <span>requests served <b data-live="requests">@{facts.requests}</b></span>
+        <span>in memory <b data-live="store">@{store_fact}</b></span>
       </p>
     </div>
 
@@ -121,6 +123,6 @@ curl -s -X POST @{origin}/api/v1/login/access-token \
     <a href="https://github.com/Tuntii/viltrum">Source</a>
     <a href="https://http-arena.com/">HttpArena results</a>
   </footer>
-  <script src="/static/landing.js" defer></script>
+  <script src="/static/live.js" defer></script>
 </body>
 </html>
