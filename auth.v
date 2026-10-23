@@ -1,13 +1,12 @@
 module main
 
 // Session extraction: Bearer token (API) or session cookie (browser).
-
-import viltrum { Request }
+import viltrum
 
 const session_cookie = 'session'
 
-fn bearer_token(req Request) ?string {
-	raw := req.headers.get('Authorization') or { return none }
+fn bearer_token(c &viltrum.Ctx) ?string {
+	raw := c.header('Authorization') or { return none }
 	if raw.len >= 7 && raw[..7].to_lower() == 'bearer ' {
 		tok := raw[7..].trim_space()
 		if tok.len == 0 {
@@ -18,31 +17,30 @@ fn bearer_token(req Request) ?string {
 	return none
 }
 
-fn cookie_value(req Request, name string) ?string {
-	raw := req.headers.get('Cookie') or { return none }
-	for part in raw.split(';') {
-		p := part.trim_space()
-		if p.len == 0 {
-			continue
-		}
-		eq := p.index('=') or { continue }
-		k := p[..eq].trim_space()
-		if k == name {
-			return p[eq + 1..].trim_space()
+fn cookie_value(c &viltrum.Ctx, name string) ?string {
+	mut it := c.header_values('Cookie')
+	for {
+		raw := it.next() or { break }
+		for part in raw.split(';') {
+			p := part.trim_space()
+			eq := p.index('=') or { continue }
+			if p[..eq].trim_space() == name {
+				return p[eq + 1..].trim_space()
+			}
 		}
 	}
 	return none
 }
 
-fn session_token(req Request) ?string {
-	if t := bearer_token(req) {
+fn session_token(c &viltrum.Ctx) ?string {
+	if t := bearer_token(c) {
 		return t
 	}
-	return cookie_value(req, session_cookie)
+	return cookie_value(c, session_cookie)
 }
 
-fn require_user(shared store Store, req Request) ?User {
-	token := session_token(req) or { return none }
+fn require_user(shared store Store, c &viltrum.Ctx) ?User {
+	token := session_token(c) or { return none }
 	lock store {
 		return store.user_from_token(token)
 	}

@@ -11,6 +11,8 @@ struct PageCtx {
 	active       string
 }
 
+// html_escape is for every request- or user-supplied string a page shows: the
+// templates print @{...} as it is.
 fn html_escape(s string) string {
 	return s.replace('&', '&amp;').replace('<', '&lt;').replace('>', '&gt;').replace('"', '&quot;')
 }
@@ -52,7 +54,7 @@ fn view_login(flash string) string {
 		title:        'Sign in'
 		email:        ''
 		is_superuser: false
-		flash:        flash
+		flash:        html_escape(flash)
 		active:       'login'
 	}
 	return $tmpl('templates/login.html')
@@ -77,9 +79,9 @@ fn view_account(page PageCtx, user_id int, full_name string, role string) string
 fn page_for(u User, title string, active string, flash string) PageCtx {
 	return PageCtx{
 		title:        title
-		email:        u.email
+		email:        html_escape(u.email)
 		is_superuser: u.is_superuser
-		flash:        flash
+		flash:        html_escape(flash)
 		active:       active
 	}
 }

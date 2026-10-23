@@ -1,57 +1,77 @@
 module main
 
-// Small response helpers (JSON API + HTML pages).
+// Small response helpers (JSON API + HTML pages). Handlers write one response
+// through the Ctx and return.
+import viltrum
 
-import viltrum {
-	Response
-	empty
-	json
-	json_escape
-	text
+// UserPublic is what the API shows of a User: never the password hash.
+struct UserPublic {
+	id           int
+	email        string
+	full_name    string
+	is_superuser bool
 }
 
-fn user_public_json(u User) string {
-	su := if u.is_superuser { 'true' } else { 'false' }
-	return '{"id":${u.id},"email":"${json_escape(u.email)}","full_name":"${json_escape(u.full_name)}","is_superuser":${su}}'
+fn public(u User) UserPublic {
+	return UserPublic{
+		id:           u.id
+		email:        u.email
+		full_name:    u.full_name
+		is_superuser: u.is_superuser
+	}
 }
 
-fn item_json(it Item) string {
-	return '{"id":${it.id},"title":"${json_escape(it.title)}","description":"${json_escape(it.description)}","owner_id":${it.owner_id}}'
+struct UsersPage {
+	data  []UserPublic
+	count int
 }
 
-fn api_error(status int, msg string) Response {
-	return json(status, '{"detail":"${json_escape(msg)}"}')
+struct ItemsPage {
+	data  []Item
+	count int
 }
 
-fn unauthorized(msg string) Response {
-	return api_error(401, msg)
+struct Detail {
+	detail string
 }
 
-fn forbidden(msg string) Response {
-	return api_error(403, msg)
+struct AccessToken {
+	access_token string
+	token_type   string
 }
 
-fn bad_request(msg string) Response {
-	return api_error(400, msg)
+struct Health {
+	status string
 }
 
-fn conflict(msg string) Response {
-	return api_error(409, msg)
+fn api_error(mut c viltrum.Ctx, status int, msg string) {
+	c.json(status, Detail{
+		detail: msg
+	})
 }
 
-fn html(status int, body string) Response {
-	mut r := text(status, body)
-	r.headers.set('Content-Type', 'text/html; charset=utf-8')
-	return r
+fn unauthorized(mut c viltrum.Ctx) {
+	api_error(mut c, 401, 'not authenticated')
 }
 
-fn redirect(location string) Response {
-	mut r := empty(303)
-	r.headers.set('Location', location)
-	return r
+fn forbidden(mut c viltrum.Ctx, msg string) {
+	api_error(mut c, 403, msg)
 }
 
-fn with_cookie(mut r Response, cookie string) Response {
-	r.headers.set('Set-Cookie', cookie)
-	return r
+fn bad_request(mut c viltrum.Ctx, msg string) {
+	api_error(mut c, 400, msg)
+}
+
+fn not_found(mut c viltrum.Ctx) {
+	api_error(mut c, 404, 'not found')
+}
+
+fn html(mut c viltrum.Ctx, status int, body string) {
+	c.bytes(status, 'text/html; charset=utf-8', body.bytes())
+}
+
+// redirect answers 303 See Other, so a form POST is followed by a GET.
+fn redirect(mut c viltrum.Ctx, location string) {
+	c.set_header('Location', location)
+	c.no_content(303)
 }
