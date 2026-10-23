@@ -8,7 +8,12 @@
   --wash: #f2f2f2;
   --sans: "Helvetica Neue", Helvetica, "Nimbus Sans", Arial, sans-serif;
   --mono: ui-monospace, "SF Mono", "Cascadia Mono", Menlo, Consolas, monospace;
-  --gutter: clamp(1rem, 4vw, 4rem);
+  --max: 96rem;
+  /* Fluid on small screens; on wide ones it centers a --max column (percent
+     resolves against the element's own container, so the dashboard's work
+     area centers inside itself); never under a notch. */
+  --gutter: max(clamp(1rem, 4vw, 4rem), calc((100% - var(--max)) / 2),
+    env(safe-area-inset-left), env(safe-area-inset-right));
   --rail: 15rem;
   color-scheme: light;
 }
@@ -43,10 +48,6 @@ a {
   text-decoration-thickness: 1px;
 }
 
-a:hover {
-  text-decoration-thickness: 2px;
-}
-
 :focus-visible {
   outline: 3px solid var(--ink);
   outline-offset: 2px;
@@ -77,6 +78,10 @@ p {
   display: none !important;
 }
 
+.label-short {
+  display: none;
+}
+
 .sr-only {
   position: absolute;
   width: 1px;
@@ -95,6 +100,7 @@ p {
   font-weight: 700;
   font-size: 1.375rem;
   letter-spacing: -0.02em;
+  min-height: 2.75rem;
   text-decoration: none;
   color: var(--paper);
 }
@@ -132,15 +138,6 @@ p {
   transition: transform 160ms cubic-bezier(0.16, 1, 0.3, 1);
 }
 
-.plate:hover {
-  background: var(--paper);
-  color: var(--ink);
-}
-
-.plate:hover svg {
-  transform: translateX(3px);
-}
-
 .plate:disabled {
   cursor: progress;
   background: var(--wash);
@@ -153,23 +150,12 @@ p {
   color: var(--ink);
 }
 
-.plate-quiet:hover {
-  background: var(--ink);
-  color: var(--paper);
-}
-
 /* On black the plate inverts. */
 .band .plate,
 .rail .plate {
   background: var(--paper);
   color: var(--ink);
   border-color: var(--paper);
-}
-
-.band .plate:hover,
-.rail .plate:hover {
-  background: var(--ink);
-  color: var(--paper);
 }
 
 .band :focus-visible,
@@ -248,11 +234,10 @@ textarea:focus-visible {
 }
 
 .band-nav a {
+  display: inline-flex;
+  align-items: center;
+  min-height: 2.75rem;
   text-decoration: none;
-}
-
-.band-nav a:hover {
-  text-decoration: underline;
 }
 
 .first {
@@ -271,7 +256,8 @@ textarea:focus-visible {
 }
 
 .hero h1 {
-  font-size: clamp(2.75rem, 7vw, 5.25rem);
+  /* Sized by width and height, so the first viewport holds on short and tall screens. */
+  font-size: clamp(2.5rem, min(6vw, 9.5vh), 7.5rem);
   letter-spacing: -0.04em;
   line-height: 0.95;
   font-weight: 800;
@@ -304,6 +290,7 @@ textarea:focus-visible {
 }
 
 .clone code {
+  min-width: 0;
   display: flex;
   align-items: center;
   padding: 0 1rem;
@@ -323,11 +310,6 @@ textarea:focus-visible {
   font-weight: 700;
   padding: 0 1rem;
   cursor: pointer;
-}
-
-.clone button:hover {
-  background: var(--ink);
-  color: var(--paper);
 }
 
 .note {
@@ -368,7 +350,6 @@ textarea:focus-visible {
   font-weight: 700;
   font-variant-numeric: tabular-nums;
 }
-
 
 .line {
   --stops: 5;
@@ -570,7 +551,7 @@ pre::selection {
 .spec {
   margin: 0;
   display: grid;
-  grid-template-columns: minmax(7.5rem, max-content) 1fr;
+  grid-template-columns: minmax(7.5rem, max-content) minmax(0, 1fr);
   border-top: 2px solid var(--ink);
 }
 
@@ -606,6 +587,9 @@ pre::selection {
 }
 
 .foot a {
+  display: inline-flex;
+  align-items: center;
+  min-height: 2.75rem;
   color: var(--paper);
 }
 
@@ -638,6 +622,7 @@ pre::selection {
   color: var(--paper);
   border-top: 6px solid var(--ink);
   box-shadow: inset 0 2px 0 var(--paper);
+  overflow-y: auto;
 }
 
 .rail-nav {
@@ -663,10 +648,6 @@ pre::selection {
   border-radius: 50%;
   border: 3px solid currentColor;
   flex: none;
-}
-
-a.rail-link:hover {
-  color: var(--paper);
 }
 
 .rail-link[aria-current="page"] {
@@ -762,6 +743,7 @@ a.rail-link:hover {
 }
 
 .pane {
+  container: pane / inline-size;
   flex: 1;
   padding: 1.75rem var(--gutter) 3rem;
   display: grid;
@@ -863,11 +845,6 @@ td.act form {
   cursor: pointer;
 }
 
-.row-btn:hover {
-  background: var(--ink);
-  color: var(--paper);
-}
-
 td.empty {
   padding: 2.5rem 0;
   color: var(--mute);
@@ -963,7 +940,61 @@ td.closed .disc {
   border: 3px solid currentColor;
 }
 
-/* ---- Small screens --------------------------------------------------- */
+/* Hover only where a pointer hovers: on touch a tapped plate must not stay inverted. */
+@media (hover: hover) {
+  a:hover {
+    text-decoration-thickness: 2px;
+  }
+
+  .plate:hover {
+    background: var(--paper);
+    color: var(--ink);
+  }
+
+  .plate:hover svg {
+    transform: translateX(3px);
+  }
+
+  .plate-quiet:hover {
+    background: var(--ink);
+    color: var(--paper);
+  }
+
+  .band .plate:hover,
+  .rail .plate:hover {
+    background: var(--ink);
+    color: var(--paper);
+  }
+
+  .band-nav a:hover {
+    text-decoration: underline;
+  }
+
+  .clone button:hover {
+    background: var(--ink);
+    color: var(--paper);
+  }
+
+  a.rail-link:hover {
+    color: var(--paper);
+  }
+
+  .row-btn:hover {
+    background: var(--ink);
+    color: var(--paper);
+  }
+}
+
+/* ---- Adaptation -------------------------------------------------------
+   Content-driven breakpoints: 1100 (rail narrows), 900 (sections stack),
+   760 (phone: line turns vertical, dashboard nav moves to the thumb),
+   480 (shortest labels). Tables stack by the pane's width, not the screen's. */
+
+@media (max-width: 1100px) {
+  :root {
+    --rail: 12rem;
+  }
+}
 
 @media (max-width: 900px) {
   .section,
@@ -974,9 +1005,68 @@ td.closed .disc {
   .locked {
     display: none;
   }
+}
 
+/* The composer keeps one row while the pane is wide enough for it. */
+@container pane (max-width: 44rem) {
   .composer {
     grid-template-columns: minmax(0, 1fr);
+  }
+}
+
+/* A narrow pane turns each table row into a stacked entry: id beside the
+   title, details under it, the row action on the right. Every column stays. */
+@container pane (max-width: 34rem) {
+  .table-wrap thead {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    overflow: hidden;
+    clip-path: inset(50%);
+  }
+
+  .table-wrap table {
+    border-top: 2px solid var(--ink);
+  }
+
+  .table-wrap tr {
+    display: grid;
+    grid-template-columns: 2.5rem minmax(0, 1fr) auto;
+    column-gap: 0.75rem;
+    row-gap: 0.25rem;
+    padding: 1rem 0;
+    border-bottom: 1px solid var(--hair);
+  }
+
+  .table-wrap td {
+    grid-column: 2;
+    padding: 0;
+    border: 0;
+    width: auto;
+  }
+
+  .table-wrap td:first-child {
+    grid-column: 1;
+    grid-row: 1 / span 4;
+  }
+
+  .table-wrap td.act {
+    grid-column: 3;
+    grid-row: 1 / span 4;
+    align-self: start;
+  }
+
+  .table-wrap td[data-label]::before {
+    content: attr(data-label) " ";
+    color: var(--mute);
+    font-family: var(--sans);
+    font-weight: 400;
+  }
+
+  .table-wrap td.empty {
+    grid-column: 1 / -1;
+    grid-row: auto;
+    padding: 1.5rem 0;
   }
 }
 
@@ -1010,7 +1100,6 @@ td.closed .disc {
 
   .band .plate {
     margin-left: auto;
-    min-height: 2.5rem;
     padding: 0 0.875rem;
     font-size: 0.9375rem;
   }
@@ -1036,7 +1125,7 @@ td.closed .disc {
   }
 
   .line li .stop {
-    grid-row: span 2;
+    grid-row: span 3;
     margin: 0;
   }
 
@@ -1048,6 +1137,8 @@ td.closed .disc {
     display: none;
   }
 
+  /* Dashboard on a phone: brand and sign-out on top, the stops along the
+     bottom edge where the thumb is, clear of the home indicator. */
   .app {
     grid-template-columns: minmax(0, 1fr);
     grid-template-rows: auto 1fr;
@@ -1056,11 +1147,11 @@ td.closed .disc {
   .rail {
     position: static;
     height: auto;
+    overflow: visible;
     flex-direction: row;
-    flex-wrap: wrap;
     align-items: center;
-    gap: 0.5rem 1.25rem;
-    padding: 0.75rem var(--gutter);
+    gap: 1rem;
+    padding: 0.625rem var(--gutter);
   }
 
   .rail .brand {
@@ -1073,16 +1164,37 @@ td.closed .disc {
   }
 
   .rail-nav {
-    order: 3;
-    width: 100%;
-    display: flex;
-    gap: 0.25rem 1.25rem;
-    overflow-x: auto;
+    position: fixed;
+    z-index: 10;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    display: grid;
+    grid-auto-flow: column;
+    grid-auto-columns: minmax(0, 1fr);
+    gap: 0;
+    padding: 0 env(safe-area-inset-right) env(safe-area-inset-bottom) env(safe-area-inset-left);
+    background: var(--ink);
+    border-top: 6px solid var(--ink);
+    box-shadow: inset 0 2px 0 var(--paper);
   }
 
   .rail-link {
-    padding: 0;
-    min-height: 2.5rem;
+    flex-direction: column;
+    justify-content: center;
+    gap: 0.375rem;
+    min-height: 4rem;
+    padding: 0.5rem 0.25rem;
+    font-size: 0.875rem;
+  }
+
+  .rail-link .disc {
+    width: 1.125rem;
+    height: 1.125rem;
+  }
+
+  .work {
+    padding-bottom: calc(4.5rem + env(safe-area-inset-bottom));
   }
 
   .rail-foot {
@@ -1091,6 +1203,7 @@ td.closed .disc {
     border: 0;
     display: flex;
     align-items: center;
+    gap: 1rem;
   }
 
   .rail-foot .who {
@@ -1099,16 +1212,270 @@ td.closed .disc {
 
   .rail-foot .plate {
     width: auto;
-    padding: 0 0.75rem;
+    padding: 0 0.875rem;
+  }
+
+  .bar {
+    padding-top: 1.25rem;
+  }
+
+  .bar h1 {
+    font-size: 1.875rem;
   }
 
   .bar .api {
     margin-left: 0;
     width: 100%;
   }
+}
 
-  .opt {
+@media (max-width: 480px) {
+  .label-long {
     display: none;
+  }
+
+  .label-short {
+    display: inline;
+  }
+
+  .actions > form,
+  .actions > form .plate,
+  .actions > a.plate {
+    width: 100%;
+  }
+
+  .actions .plate {
+    justify-content: space-between;
+  }
+
+  /* The spec list reads as term over description. */
+  .spec {
+    grid-template-columns: minmax(0, 1fr);
+  }
+
+  .spec dt {
+    padding-bottom: 0;
+    border-bottom: 0;
+  }
+
+  .spec dd {
+    padding-top: 0.25rem;
+  }
+}
+
+/* Short landscape screens: a compact sign band, and the rail scrolls with
+   the page instead of pinning. */
+@media (min-width: 761px) and (max-height: 560px) {
+  .band {
+    min-height: 4.5rem;
+  }
+
+  .band .brand {
+    font-size: 1.375rem;
+    gap: 0.75rem;
+  }
+
+  .band .brand img {
+    width: 2.5rem;
+    height: 2.5rem;
+  }
+
+  .first {
+    min-height: calc(100svh - 4.5rem);
+  }
+
+  .rail {
+    position: static;
+    height: auto;
+    min-height: 100vh;
+  }
+}
+
+/* Touch: every control reaches 44px; the denser desktop sizes stay for mice.
+   A press inverts the plate, the feedback hover gives a mouse. */
+@media (pointer: coarse) {
+  .row-btn,
+  .rail .plate,
+  .band .plate,
+  .clone button {
+    min-height: 2.75rem;
+  }
+
+  .plate-quiet:active,
+  .clone button:active,
+  .row-btn:active {
+    background: var(--ink);
+    color: var(--paper);
+  }
+
+  .plate:not(.plate-quiet):active,
+  .band .plate:active,
+  .rail .plate:active {
+    background: var(--paper);
+    color: var(--ink);
+  }
+}
+
+/* Very wide screens: the sign grows with the room; the column stays centered. */
+@media (min-width: 1800px) {
+  html {
+    font-size: 18px;
+  }
+}
+
+@media (min-width: 2400px) {
+  html {
+    font-size: 20px;
+  }
+}
+
+/* ---- Print: ink on paper, no black fields, nothing that only works on a screen. */
+
+@media print {
+  @page {
+    margin: 16mm 14mm;
+  }
+
+  :root {
+    --gutter: 0px;
+  }
+
+  html {
+    font-size: 11pt;
+  }
+
+  .band,
+  .rail,
+  .strip,
+  .foot,
+  pre {
+    background: none;
+    color: var(--ink);
+    box-shadow: none;
+  }
+
+  .band,
+  .rail {
+    border-top: 0;
+    border-bottom: 2px solid var(--ink);
+    min-height: 0;
+    padding: 0 0 0.5rem;
+  }
+
+  .brand {
+    color: var(--ink);
+    min-height: 0;
+  }
+
+  /* The logo is a black square: printed on white it needs no field. */
+  .brand img {
+    filter: invert(1);
+  }
+
+  .band-nav,
+  .band .plate,
+  .actions,
+  .note,
+  .route-head .plate,
+  .line .rider,
+  .line output,
+  .rail-nav,
+  .rail-foot,
+  .composer,
+  .flash,
+  td.act,
+  .table-wrap th:last-child,
+  .signin,
+  .bar .api {
+    display: none !important;
+  }
+
+  .first {
+    min-height: 0;
+    display: block;
+  }
+
+  .hero {
+    padding: 1.5rem 0 1rem;
+  }
+
+  .hero h1 {
+    font-size: 30pt;
+  }
+
+  .route {
+    padding: 0 0 1rem;
+    break-inside: avoid;
+  }
+
+  .strip {
+    padding: 0.5rem 0;
+    border-top: 2px solid var(--ink);
+    border-bottom: 2px solid var(--ink);
+    font-size: 10pt;
+  }
+
+  .strip span,
+  .strip span b {
+    color: var(--ink);
+  }
+
+  .stops {
+    margin: 0;
+  }
+
+  .section {
+    grid-template-columns: minmax(0, 1fr);
+    padding: 1.25rem 0 1.25rem 1.5rem;
+    break-inside: avoid;
+  }
+
+  pre {
+    border: 2px solid var(--ink);
+    white-space: pre-wrap;
+    font-size: 9pt;
+  }
+
+  .section-text a[href^="http"]::after,
+  .foot a[href^="http"]::after {
+    content: " (" attr(href) ")";
+    font-size: 0.85em;
+    color: var(--mute);
+  }
+
+  .foot {
+    border-top: 2px solid var(--ink);
+    padding: 0.75rem 0 0;
+    color: var(--mute);
+  }
+
+  .foot a {
+    min-height: 0;
+    color: var(--ink);
+  }
+
+  .app {
+    display: block;
+  }
+
+  .rail {
+    position: static;
+    height: auto;
+    display: block;
+  }
+
+  .bar,
+  .pane {
+    padding-left: 0;
+    padding-right: 0;
+  }
+
+  tr {
+    break-inside: avoid;
+  }
+
+  thead {
+    display: table-header-group;
   }
 }
 

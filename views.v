@@ -60,7 +60,7 @@ fn render_items_rows(items []Item) string {
 		title := html_escape(it.title)
 		desc := html_escape(it.description)
 		b += '<tr><td class="num">${it.id}</td><td class="strong">${title}</td><td class="desc">${desc}</td>'
-		b += '<td class="num opt">${it.owner_id}</td><td class="act">'
+		b += '<td class="num opt" data-label="Owner">${it.owner_id}</td><td class="act">'
 		b += '<form method="post" action="/items/${it.id}/delete"><button type="submit" class="row-btn" aria-label="Delete ${title}">Delete</button></form></td></tr>'
 	}
 	return b
@@ -83,8 +83,8 @@ fn render_users_rows(users []User) string {
 
 fn view_landing(signed_in bool, origin string, facts ProcessFacts, items int, users int) string {
 	// One click signs in as the seeded demo admin: the action a visitor came for.
-	band_action := demo_action(signed_in, 'Open the dashboard')
-	hero_action := demo_action(signed_in, 'Open the live dashboard')
+	band_action := demo_action(signed_in, 'Open the dashboard', 'Dashboard')
+	hero_action := demo_action(signed_in, 'Open the live dashboard', 'Open the live dashboard')
 	hero_note := if signed_in {
 		'You are signed in. The dashboard and the API share your session cookie.'
 	} else {
@@ -95,11 +95,17 @@ fn view_landing(signed_in bool, origin string, facts ProcessFacts, items int, us
 	return $tmpl('templates/landing.html')
 }
 
-fn demo_action(signed_in bool, label string) string {
-	if signed_in {
-		return '<a class="plate" href="/items">${label} ${arrow_svg}</a>'
+// demo_action is the sign-in plate; `short` replaces `label` on the narrowest screens.
+fn demo_action(signed_in bool, label string, short string) string {
+	text := if label == short {
+		label
+	} else {
+		'<span class="label-long">${label}</span><span class="label-short">${short}</span>'
 	}
-	return '<form method="post" action="/login"><input type="hidden" name="email" value="admin@example.com" /><input type="hidden" name="password" value="changethis" /><button type="submit" class="plate">${label} ${arrow_svg}</button></form>'
+	if signed_in {
+		return '<a class="plate" href="/items">${text} ${arrow_svg}</a>'
+	}
+	return '<form method="post" action="/login"><input type="hidden" name="email" value="admin@example.com" /><input type="hidden" name="password" value="changethis" /><button type="submit" class="plate">${text} ${arrow_svg}</button></form>'
 }
 
 fn view_login(flash string, items int, users int) string {

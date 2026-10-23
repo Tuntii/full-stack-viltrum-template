@@ -11,7 +11,7 @@ colors:
 typography:
   display:
     fontFamily: "Helvetica Neue, Helvetica, Nimbus Sans, Arial, sans-serif"
-    fontSize: "clamp(2.75rem, 7vw, 5.25rem)"
+    fontSize: "clamp(2.5rem, min(6vw, 9.5vh), 7.5rem)"
     fontWeight: 800
     lineHeight: 0.95
     letterSpacing: "-0.04em"
@@ -193,7 +193,7 @@ Two signage values and a short gray ladder; color is never used.
 **Character:** One sign-shop grotesk carries everything, heavy and tight at sign scale, plain at reading size. Mono marks what the machine says: code, commands, ids, and measured values, always with tabular figures.
 
 ### Hierarchy
-- **Display** (800, clamp 2.75rem to 5.25rem, line-height 0.95, -0.04em): the landing headline only; one per page.
+- **Display** (800, clamp 2.5rem to 7.5rem by the smaller of 6vw and 9.5vh, line-height 0.95, -0.04em): the landing headline only; one per page. Sizing by height too keeps the first viewport whole on short laptops and lets it grow on tall screens.
 - **Headline** (700, clamp 1.875rem to 3rem, 1.1, -0.035em): landing section titles, one shouting phrase per section.
 - **Title** (700, 2.25rem, 1.1, -0.03em): the dashboard page title in the top bar.
 - **Station** (700, 1.5rem, 1.1, -0.02em): station names on the line.
@@ -215,9 +215,17 @@ The landing's first viewport is a fixed sequence filling `100svh` below the band
 
 The dashboard is a two-column grid: a 15rem sticky black rail and the work column (top bar with a 2px bottom rule, then the pane). Content in the pane stacks with a 1.75rem gap.
 
-Horizontal padding is always the gutter, `clamp(1rem, 4vw, 4rem)`. The rhythm steps through 0.25, 0.5, 0.75, 1, 1.25, 1.75, and 2rem; section padding scales with viewport height (`clamp(3rem, 8vh, 5.5rem)` top).
+Horizontal padding is always the gutter: `clamp(1rem, 4vw, 4rem)` on small screens, widening to center a 96rem column on wide ones (`calc((100% - 96rem) / 2)`, measured against each element's own container, so the dashboard's work area centers inside itself), and never less than the notch's safe-area inset. Black bands and strips still run edge to edge; only their content is held to the column. The rhythm steps through 0.25, 0.5, 0.75, 1, 1.25, 1.75, and 2rem; section padding scales with viewport height (`clamp(3rem, 8vh, 5.5rem)` top). From 1800px the root size steps to 18px and from 2400px to 20px, so the sign grows with the room.
 
-Responsive: at 900px two-column sections, the sign-in form, and the item composer collapse to one column, and the locked table preview is hidden. At 760px the band shrinks to 4.5rem and drops its nav, the line turns vertical (rule on the left, stops in a 2.25rem column, no rider), the rail becomes a top bar with its links in a scrolling row, and columns marked optional drop out of tables.
+Responsive (content-driven):
+- **1100px:** the rail narrows to 12rem.
+- **900px:** two-column sections and the sign-in collapse to one column; the locked table preview is hidden.
+- **760px (phone):** the band shrinks to 4.5rem and drops its nav (Docs stays in the footer); the line turns vertical (rule on the left, stops in a 2.25rem column, no rider). The dashboard rail splits: brand and sign-out stay on top, and the page stops move to a fixed black bar along the bottom edge (disc over label, 4rem tall, above the home indicator).
+- **480px:** plates take the full width and the band plate shortens to "Dashboard"; the spec list reads term over description.
+- **Short screens (under 560px tall, wider than 760px):** the band compacts to 4.5rem and the rail scrolls with the page.
+- **By container, not viewport:** the item composer keeps one row while the pane is at least 44rem; under 34rem each table row becomes a stacked entry (id beside the title, details under it labeled from `data-label`, the row action on the right). Every column stays.
+- **Touch (`pointer: coarse`):** every control reaches 44px; a press inverts a plate the way hover does for a mouse. Hover styles apply only under `hover: hover`, so a tapped plate never stays inverted.
+- **Print:** no black fields. Bands, the rail, the strip and code blocks print as ink rules on paper, and the logo inverts. Plates, forms, the rail nav and row actions are dropped. Links print their URLs, and table rows never split across pages.
 
 ## Elevation & Depth
 
@@ -257,7 +265,7 @@ A plate is a sign: square, solid, one action.
 
 ### Navigation
 - **Band (landing):** a 6.5rem black band with the signage stripe, brand at 2rem with a 3.5rem logo, text links in weight 700 underlined only on hover, and a white plate at the end.
-- **Rail (dashboard):** a sticky 15rem black column. Each link is a 1rem outlined disc and a 1.0625rem bold label in night gray; the current page has a filled white disc and white text; a locked page shows a barred disc and a not-allowed cursor. The foot holds the signed-in email and a full-width white plate. Under 760px it becomes a wrapping top bar.
+- **Rail (dashboard):** a sticky 15rem black column. Each link is a 1rem outlined disc and a 1.0625rem bold label in night gray; the current page has a filled white disc and white text; a locked page shows a barred disc and a not-allowed cursor. The foot holds the signed-in email and a full-width white plate. Under 760px the links become a fixed bottom bar of three stops (see Layout).
 
 ### The Line (signature)
 Five stations on a 6px black rule, each an outlined stop disc, a station name, and a one-line platform-gray description. "Send a request" fetches the health endpoint; a black rider disc with a white core travels the rule in 900ms linear while each stop fills black as the rider reaches it, then the measured round trip prints in bold mono at the terminus. With reduced motion there is no ride and the stops fill at once.

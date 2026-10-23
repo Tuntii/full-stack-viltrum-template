@@ -31,8 +31,15 @@
       { "name": "ride", "value": "900ms linear", "purpose": "The rider crosses the line; each stop fills at i * 225ms. Removed under reduced motion." }
     ],
     "breakpoints": [
+      { "name": "rail-narrow", "value": "1100px" },
       { "name": "stack", "value": "900px" },
-      { "name": "compact", "value": "760px" }
+      { "name": "compact", "value": "760px" },
+      { "name": "narrow", "value": "480px" },
+      { "name": "short", "value": "max-height 560px" },
+      { "name": "pane-composer", "value": "container 44rem" },
+      { "name": "pane-stacked-rows", "value": "container 34rem" },
+      { "name": "root-18", "value": "1800px" },
+      { "name": "root-20", "value": "2400px" }
     ]
   },
   "components": [
