@@ -1,7 +1,7 @@
 # Full Stack Viltrum Template
 
-Clean teaching app on [Viltrum](https://github.com/Tuntii/viltrum) **≥ 1.5.0**, the zero-allocation 1.x core
-(`Ctx` handlers, `c.json` with structs, `c.form_value`, `app.static_files`):
+Clean teaching app on [Viltrum](https://github.com/Tuntii/viltrum) **≥ 1.6.0**, the zero-allocation 1.x core
+(`Ctx` handlers, `c.json` with structs, `c.html`, `c.redirect`, `c.form_value`, cookies, `app.static_files`):
 
 - **Landing page** — `/` introduces Viltrum, with live facts read from the running process  
 - **Admin dashboard** — server-rendered HTML (`$tmpl`) + session cookie, black-and-white like the logo  
@@ -44,7 +44,7 @@ Serving needs Linux (Viltrum's engine is epoll): on Windows use WSL2, on macOS a
   models.v          # User, Item, Session
   store.v           # in-memory persistence
   auth.v            # bearer + cookie session
-  respond.v         # json/html/redirect helpers
+  respond.v         # JSON shapes and API error helpers
   views.v           # $tmpl wrappers, dashboard rail, table rows
   stats.v           # live process facts for the landing page
   routes_web.v      # browser pages + forms
@@ -90,7 +90,7 @@ curl -s http://127.0.0.1:8090/api/v1/items/ -H "Authorization: Bearer $TOKEN"
 ```
 
 `/api/v1/login/access-token` takes the credentials as a form body (OAuth2 password flow, like FastAPI) or as
-JSON. Web login uses `POST /login` (`c.form_value`) and sets an `HttpOnly` `session` cookie; the API accepts
+JSON. Web login uses `POST /login` (`c.form_value`) and sets an `HttpOnly` `session` cookie with `c.set_cookie`; the API accepts
 that cookie too. Responses are structs written with `c.json` (compile-time encoder, escaping included), and
 request JSON is read with V's `json` module.
 

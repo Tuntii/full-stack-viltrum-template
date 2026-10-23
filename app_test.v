@@ -197,3 +197,12 @@ fn test_request_log_hides_ids_and_probes() {
 	assert body.contains('"recent":[{"seq":1,"method":"GET","route":"/api/v1/health","status":200,')
 	assert !body.contains('"route":"/api/v1/stats"')
 }
+
+fn test_session_cookie_attributes() {
+	app := demo_app()
+	login := send(app, 'POST', '/login', '', 'application/x-www-form-urlencoded',
+		'email=admin%40example.com&password=changethis')
+	cookie := header_of(login, 'Set-Cookie')
+	assert cookie.ends_with('; Path=/; Max-Age=604800; HttpOnly; SameSite=Lax')
+	assert header_of(login, 'Location') == '/items'
+}

@@ -48,7 +48,7 @@ fn new_app(shared store Store) &viltrum.App {
 		if c.path() != '/api/v1/stats' {
 			us := (time.sys_mono_now() - t0) / 1000
 			lock reqlog {
-				reqlog.add(c.method().str().to_upper(), c.path(), c.status, us)
+				reqlog.add(c.method_name(), c.path(), c.status, us)
 			}
 		}
 	})

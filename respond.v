@@ -1,7 +1,7 @@
 module main
 
-// Small response helpers (JSON API + HTML pages). Handlers write one response
-// through the Ctx and return.
+// JSON response shapes and error helpers for the API. Pages answer with c.html and
+// c.redirect from Viltrum itself.
 import viltrum
 
 // UserPublic is what the API shows of a User: never the password hash.
@@ -64,16 +64,6 @@ fn bad_request(mut c viltrum.Ctx, msg string) {
 
 fn not_found(mut c viltrum.Ctx) {
 	api_error(mut c, 404, 'not found')
-}
-
-fn html(mut c viltrum.Ctx, status int, body string) {
-	c.bytes(status, 'text/html; charset=utf-8', body.bytes())
-}
-
-// redirect answers 303 See Other, so a form POST is followed by a GET.
-fn redirect(mut c viltrum.Ctx, location string) {
-	c.set_header('Location', location)
-	c.no_content(303)
 }
 
 // request_origin is the scheme and host the visitor used, for the examples a

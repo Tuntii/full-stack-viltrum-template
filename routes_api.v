@@ -24,7 +24,7 @@ struct ItemIn {
 
 // decode_body reads a JSON request body into T; none when it is not valid JSON.
 fn decode_body[T](c &viltrum.Ctx) ?T {
-	return json.decode(T, c.body().bytestr()) or { return none }
+	return json.decode(T, c.body_text()) or { return none }
 }
 
 // login_input takes the credentials from a form body (OAuth2 password flow, what
