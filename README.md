@@ -1,6 +1,7 @@
 # Full Stack Viltrum Template
 
-Clean teaching app on [Viltrum](https://github.com/Tuntii/viltrum) **≥ 0.9.0** (`form_value`, `json_escape`, JSON field helpers):
+Clean teaching app on [Viltrum](https://github.com/Tuntii/viltrum) **≥ 1.5.0**, the zero-allocation 1.x core
+(`Ctx` handlers, `c.json` with structs, `c.form_value`, `app.static_files`):
 
 - **Web UI** — server-rendered HTML (`$tmpl`) + session cookie  
 - **JSON API** — `/api/v1` (Bearer token **or** same cookie)  
@@ -17,7 +18,11 @@ git clone https://github.com/Tuntii/full-stack-viltrum-template.git
 cd full-stack-viltrum-template
 bash scripts/setup.sh   # links Viltrum → ~/.vmodules/viltrum
 v run .
+v test .                # end-to-end tests through handle_raw, no socket
 ```
+
+Serving needs Linux (Viltrum's engine is epoll): on Windows use WSL2, on macOS a Linux VM or container.
+`v test .` runs anywhere.
 
 | | |
 |--|--|
@@ -33,6 +38,7 @@ v run .
 ```text
 .
   main.v            # wire middleware, routes, listen
+  app_test.v        # end-to-end tests (handle_raw)
   models.v          # User, Item, Session
   store.v           # in-memory persistence
   auth.v            # bearer + cookie session
@@ -79,7 +85,16 @@ TOKEN=$(curl -s -X POST http://127.0.0.1:8090/api/v1/login/access-token \
 curl -s http://127.0.0.1:8090/api/v1/items/ -H "Authorization: Bearer $TOKEN"
 ```
 
-Web login uses `POST /login` (`req.form_value`) and sets an `HttpOnly` `session` cookie. The API accepts that cookie too. JSON responses use `viltrum.json_escape` (not a local copy).
+`/api/v1/login/access-token` takes the credentials as a form body (OAuth2 password flow, like FastAPI) or as
+JSON. Web login uses `POST /login` (`c.form_value`) and sets an `HttpOnly` `session` cookie; the API accepts
+that cookie too. Responses are structs written with `c.json` (compile-time encoder, escaping included), and
+request JSON is read with V's `json` module.
+
+### Request strings are views
+
+In Viltrum 1.x, what a handler reads from the request (`c.form_value`, `c.header`, `c.param`, `c.body`) points
+into the connection's buffer and is only valid until the handler returns. `store.v` clones every string it
+keeps; do the same wherever request data outlives the handler.
 
 ---
 
@@ -90,6 +105,7 @@ HTML is compiled with V’s built-in [`$tmpl`](https://github.com/vlang/v/blob/m
 - Shell pages live under `templates/`
 - Literal `@` in HTML must be written as `@@` (e.g. emails)
 - List bodies are built in `views.v` (escape + join) so templates stay simple shells
+- `@{...}` prints as is: escape request and user data with `html_escape` before it reaches a template
 
 No third-party template package.
 

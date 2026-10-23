@@ -2,7 +2,10 @@ module main
 
 // In-memory persistence. Swap this file for Postgres/SQLite later;
 // handlers should not care.
-
+//
+// Strings a handler reads from the request (form values, headers) are views into
+// the connection's buffer and change after the handler returns, so whatever the
+// store keeps is cloned here.
 import crypto.sha256
 import rand
 import time
@@ -49,7 +52,7 @@ fn (mut s Store) seed_superuser(email string, password string, full_name string)
 }
 
 fn (mut s Store) create_user(email string, password string, full_name string, is_superuser bool) !User {
-	key := email.to_lower()
+	key := email.to_lower().clone()
 	if key in s.email_index {
 		return error('email already registered')
 	}
@@ -63,8 +66,8 @@ fn (mut s Store) create_user(email string, password string, full_name string, is
 	s.next_user_id++
 	u := User{
 		id:              id
-		email:           email
-		full_name:       full_name
+		email:           email.clone()
+		full_name:       full_name.clone()
 		is_superuser:    is_superuser
 		hashed_password: s.hash_password(password)
 	}
@@ -113,8 +116,8 @@ fn (mut s Store) create_item(owner_id int, title string, description string) !It
 	s.next_item_id++
 	it := Item{
 		id:          id
-		title:       title.trim_space()
-		description: description
+		title:       title.trim_space().clone()
+		description: description.clone()
 		owner_id:    owner_id
 	}
 	s.items[id] = it
@@ -145,11 +148,11 @@ fn (s &Store) all_users() []User {
 
 fn (mut s Store) update_item(id int, title string, description string) !Item {
 	old := s.items[id] or { return error('not found') }
-	new_title := if title.trim_space().len > 0 { title.trim_space() } else { old.title }
+	new_title := if title.trim_space().len > 0 { title.trim_space().clone() } else { old.title }
 	it := Item{
 		id:          old.id
 		title:       new_title
-		description: description
+		description: description.clone()
 		owner_id:    old.owner_id
 	}
 	s.items[id] = it
