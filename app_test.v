@@ -102,7 +102,6 @@ fn test_users_only_for_superusers() {
 
 fn test_browser_flow() {
 	app := demo_app()
-	assert header_of(get(app, '/', ''), 'Location') == '/login'
 	login := send(app, 'POST', '/login', '', 'application/x-www-form-urlencoded',
 		'email=admin%40example.com&password=changethis')
 	assert status_of(login) == 303 && header_of(login, 'Location') == '/items'
@@ -134,4 +133,76 @@ fn test_static_css() {
 	res := get(demo_app(), '/static/style.css', '')
 	assert status_of(res) == 200 && header_of(res, 'Content-Type').starts_with('text/css')
 	assert header_of(res, 'Cache-Control') == 'max-age=3600'
+}
+
+fn test_landing() {
+	app := demo_app()
+	page := get(app, '/', 'X-Forwarded-Proto: https\r\n')
+	assert status_of(page) == 200
+	body := body_of(page)
+	assert body.contains('Viltrum owns the wire')
+	// the one-click demo sign-in and the live process facts
+	assert body.contains('name="email" value="admin@example.com"')
+	assert body.contains('1 item, 1 user')
+	assert body.contains('curl -s https://x/api/v1/health')
+	assert !body.contains('href="/items"')
+	// signed in, the landing links to the dashboard instead
+	login := send(app, 'POST', '/login', '', 'application/x-www-form-urlencoded',
+		'email=admin%40example.com&password=changethis')
+	jar := 'Cookie: ${header_of(login, 'Set-Cookie').all_before(';')}\r\n'
+	signed_in := body_of(get(app, '/', jar))
+	assert signed_in.contains('href="/items"') && !signed_in.contains('name="password"')
+}
+
+fn test_login_is_the_locked_dashboard() {
+	body := body_of(get(demo_app(), '/login', ''))
+	assert body.contains('class="rail-link is-locked"')
+	assert body.contains('value="admin@example.com"')
+	assert body.contains('1 item and 1 user in memory')
+}
+
+fn test_rail_marks_the_current_page() {
+	app := demo_app()
+	login := send(app, 'POST', '/login', '', 'application/x-www-form-urlencoded',
+		'email=admin%40example.com&password=changethis')
+	jar := 'Cookie: ${header_of(login, 'Set-Cookie').all_before(';')}\r\n'
+	items := body_of(get(app, '/items', jar))
+	assert items.contains('href="/items" aria-current="page"')
+	assert items.contains('href="/users"') // superuser
+	assert items.contains('1 item')
+	assert body_of(get(app, '/users', jar)).contains('href="/users" aria-current="page"')
+}
+
+fn test_stats_are_live() {
+	app := demo_app()
+	_ = get(app, '/api/v1/health', '')
+	res := get(app, '/api/v1/stats', '')
+	assert status_of(res) == 200 && header_of(res, 'Cache-Control') == 'no-store'
+	body := body_of(res)
+	assert body.contains('"requests":2,')
+	assert body.contains('"items":1,"users":1')
+	assert uptime_text(3725) == '1:02:05'
+	// the pages render the same readings, marked for live.js
+	assert body_of(get(app, '/', '')).contains('data-live="requests"')
+	assert body_of(get(app, '/login', '')).contains('class="pulse"')
+}
+
+fn test_request_log_hides_ids_and_probes() {
+	assert route_of('/items/12/delete', 303) == '/items/:id/delete'
+	assert route_of('/wp-login.php', 404) == '(no route)'
+	app := demo_app()
+	_ = get(app, '/api/v1/health', '')
+	_ = get(app, '/api/v1/stats', '') // the pages' polling stays out of the log
+	body := body_of(get(app, '/api/v1/stats', ''))
+	assert body.contains('"recent":[{"seq":1,"method":"GET","route":"/api/v1/health","status":200,')
+	assert !body.contains('"route":"/api/v1/stats"')
+}
+
+fn test_session_cookie_attributes() {
+	app := demo_app()
+	login := send(app, 'POST', '/login', '', 'application/x-www-form-urlencoded',
+		'email=admin%40example.com&password=changethis')
+	cookie := header_of(login, 'Set-Cookie')
+	assert cookie.ends_with('; Path=/; Max-Age=604800; HttpOnly; SameSite=Lax')
+	assert header_of(login, 'Location') == '/items'
 }

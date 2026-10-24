@@ -2,38 +2,46 @@
 <html lang="en">
 <head>
   <meta charset="utf-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>@{page.title} · Viltrum</title>
-  <link rel="stylesheet" href="/static/style.css" />
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+  <title>@{page.title} · Viltrum dashboard</title>
+  <link rel="icon" href="/static/favicon.svg" type="image/svg+xml" />
+  <link rel="stylesheet" href="/static/style.css?v=5" />
 </head>
-<body>
-  <div class="shell">
-    <header class="top">
-      <span class="mark">Viltrum</span>
-    </header>
-    <main class="main narrow">
+<body class="app">
+  <aside class="rail">
+    <a class="brand" href="/"><img src="/static/logo-white.svg" alt="" width="40" height="40" />Viltrum</a>
+    <nav class="rail-nav" aria-label="Dashboard">@{rail}</nav>
+    <div class="rail-foot">@{rail_foot}</div>
+  </aside>
+  <div class="work">
+    <header class="bar">
       <h1>Sign in</h1>
-      <p class="lead">Server-rendered starter. Cookie session for the UI; JSON under /api/v1.</p>
+      <span class="api">Or use the API: POST /api/v1/login/access-token</span>
+    </header>
+    <main class="pane">
       <p class="flash" role="alert">@{page.flash}</p>
-      <form class="form" method="post" action="/login">
-        <label>
-          <span>Email</span>
-          <input name="email" type="email" required value="admin@@example.com" autocomplete="username" />
-        </label>
-        <label>
-          <span>Password</span>
-          <input name="password" type="password" required value="changethis" autocomplete="current-password" />
-        </label>
-        <button type="submit" class="btn">Sign in</button>
-      </form>
+      <div class="signin">
+        <form method="post" action="/login">
+          <label class="field">
+            <span>Email</span>
+            <input name="email" type="email" required value="admin@@example.com" autocomplete="username" />
+          </label>
+          <label class="field">
+            <span>Password</span>
+            <input name="password" type="password" required value="changethis" autocomplete="current-password" />
+          </label>
+          <button type="submit" class="plate">Sign in <svg viewBox="0 0 20 20" aria-hidden="true"><path d="M3 10h12M11 5l5 5-5 5" fill="none" stroke="currentColor" stroke-width="2.5"/></svg></button>
+          <p class="note">The demo account is filled in: admin@@example.com, password changethis.</p>
+        </form>
+        <div class="locked">
+          <table>
+            <thead><tr><th>Id</th><th>Title</th><th>Description</th><th>Owner</th></tr></thead>
+            <tbody><tr><td colspan="4" class="closed"><span class="disc"></span>@{behind}</td></tr></tbody>
+          </table>
+        </div>
+      </div>
     </main>
-    <footer class="foot">
-      <p>
-        <a href="https://github.com/Tuntii/full-stack-viltrum-template">full-stack-viltrum-template</a>
-        on
-        <a href="https://github.com/Tuntii/viltrum">Viltrum</a>
-      </p>
-    </footer>
   </div>
+  <script src="/static/live.js?v=5" defer></script>
 </body>
 </html>

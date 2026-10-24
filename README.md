@@ -1,9 +1,10 @@
 # Full Stack Viltrum Template
 
-Clean teaching app on [Viltrum](https://github.com/Tuntii/viltrum) **≥ 1.5.0**, the zero-allocation 1.x core
-(`Ctx` handlers, `c.json` with structs, `c.form_value`, `app.static_files`):
+Clean teaching app on [Viltrum](https://github.com/Tuntii/viltrum) **≥ 1.6.0**, the zero-allocation 1.x core
+(`Ctx` handlers, `c.json` with structs, `c.html`, `c.redirect`, `c.form_value`, cookies, `app.static_files`):
 
-- **Web UI** — server-rendered HTML (`$tmpl`) + session cookie  
+- **Landing page** — `/` introduces Viltrum, with live facts read from the running process  
+- **Admin dashboard** — server-rendered HTML (`$tmpl`) + session cookie, black-and-white like the logo  
 - **JSON API** — `/api/v1` (Bearer token **or** same cookie)  
 - **In-memory store** — no ORM, no Docker, no React build  
 
@@ -26,7 +27,8 @@ Serving needs Linux (Viltrum's engine is epoll): on Windows use WSL2, on macOS a
 
 | | |
 |--|--|
-| UI | http://127.0.0.1:8090/login |
+| Landing | http://127.0.0.1:8090/ |
+| Dashboard | http://127.0.0.1:8090/login |
 | API | `GET /api/v1/health` |
 | Demo | `admin@example.com` / `changethis` |
 | Bind | `VILTRUM_ADDR` (default `127.0.0.1:8090`) |
@@ -42,12 +44,13 @@ Serving needs Linux (Viltrum's engine is epoll): on Windows use WSL2, on macOS a
   models.v          # User, Item, Session
   store.v           # in-memory persistence
   auth.v            # bearer + cookie session
-  respond.v         # json/html/redirect helpers
-  views.v           # $tmpl wrappers
+  respond.v         # JSON shapes and API error helpers
+  views.v           # $tmpl wrappers, dashboard rail, table rows
+  stats.v           # live process facts for the landing page
   routes_web.v      # browser pages + forms
   routes_api.v      # /api/v1 JSON
   templates/        # HTML shells (V $tmpl)
-  static/style.css
+  static/           # style.css, live.js (live readings, the train), the logo variants
   scripts/setup.sh
 ```
 
@@ -69,6 +72,7 @@ Swap `store.v` for a real database later; keep handlers thin.
 | Method | Path | Auth |
 |--------|------|------|
 | GET | `/api/v1/health` | no |
+| GET | `/api/v1/stats` | no (live process facts for the pages) |
 | POST | `/api/v1/login/access-token` | no → bearer token |
 | POST | `/api/v1/logout` | yes |
 | GET | `/api/v1/users/me` | yes |
@@ -86,7 +90,7 @@ curl -s http://127.0.0.1:8090/api/v1/items/ -H "Authorization: Bearer $TOKEN"
 ```
 
 `/api/v1/login/access-token` takes the credentials as a form body (OAuth2 password flow, like FastAPI) or as
-JSON. Web login uses `POST /login` (`c.form_value`) and sets an `HttpOnly` `session` cookie; the API accepts
+JSON. Web login uses `POST /login` (`c.form_value`) and sets an `HttpOnly` `session` cookie with `c.set_cookie`; the API accepts
 that cookie too. Responses are structs written with `c.json` (compile-time encoder, escaping included), and
 request JSON is read with V's `json` module.
 
@@ -123,6 +127,7 @@ Edge TLS: put Caddy/nginx in front ([Viltrum deploy](https://github.com/Tuntii/v
 
 - Inspiration: [fastapi/full-stack-fastapi-template](https://github.com/fastapi/full-stack-fastapi-template) (MIT)  
 - Engine: [Tuntii/viltrum](https://github.com/Tuntii/viltrum) (MIT)  
+- Logo: designed by [celaldursunduz](https://github.com/celaldursunduz) for Viltrum  
 
 ## License
 

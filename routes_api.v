@@ -24,7 +24,7 @@ struct ItemIn {
 
 // decode_body reads a JSON request body into T; none when it is not valid JSON.
 fn decode_body[T](c &viltrum.Ctx) ?T {
-	return json.decode(T, c.body().bytestr()) or { return none }
+	return json.decode(T, c.body_text()) or { return none }
 }
 
 // login_input takes the credentials from a form body (OAuth2 password flow, what
@@ -39,11 +39,17 @@ fn login_input(mut c viltrum.Ctx) LoginIn {
 	return decode_body[LoginIn](c) or { LoginIn{} }
 }
 
-fn register_api(mut api viltrum.Group, shared store Store) {
+fn register_api(mut api viltrum.Group, shared store Store, hits &Hits, shared reqlog ReqLog) {
 	api.get('/health', fn (mut c viltrum.Ctx) {
 		c.json(200, Health{
 			status: 'ok'
 		})
+	})
+
+	// The live pages poll this for their departure strip and status line.
+	api.get('/stats', fn [shared store, hits, shared reqlog] (mut c viltrum.Ctx) {
+		c.set_header('Cache-Control', 'no-store')
+		c.json(200, live_facts(shared store, hits, shared reqlog))
 	})
 
 	api.post('/login/access-token', fn [shared store] (mut c viltrum.Ctx) {

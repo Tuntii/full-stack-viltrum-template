@@ -10,6 +10,7 @@ module main
 //   templates/  — V $tmpl HTML
 //   static/     — CSS only
 import os
+import time
 import viltrum
 
 fn main() {
@@ -36,9 +37,24 @@ fn new_app(shared store Store) &viltrum.App {
 	mut app := viltrum.new()
 	app.use(viltrum.recover)
 	app.use(viltrum.logger)
+	// Every request counts toward "requests served" on the live pages, and all
+	// but the pages' own polling land in the live request log.
+	mut hits := &Hits{}
+	shared reqlog := ReqLog{}
+	app.use(fn [mut hits, shared reqlog] (mut c viltrum.Ctx) {
+		hits.add()
+		t0 := time.sys_mono_now()
+		c.next()
+		if c.path() != '/api/v1/stats' {
+			us := (time.sys_mono_now() - t0) / 1000
+			lock reqlog {
+				reqlog.add(c.method_name(), c.path(), c.status, us)
+			}
+		}
+	})
 	app.static_files('/static', static_dir, max_age: 3600)
-	register_web(mut app, shared store)
+	register_web(mut app, shared store, hits, shared reqlog)
 	mut api := app.group('/api/v1')
-	register_api(mut api, shared store)
+	register_api(mut api, shared store, hits, shared reqlog)
 	return app
 }

@@ -1,0 +1,369 @@
+{
+  "schemaVersion": 2,
+  "generatedAt": "2026-10-23T00:00:00Z",
+  "title": "Design System: Viltrum demo and full-stack template",
+  "extensions": {
+    "colorMeta": {
+      "signage-black": {
+        "role": "primary",
+        "displayName": "Signage Black",
+        "canonical": "#141518",
+        "tonalRamp": [
+          "#141518",
+          "#1a1a1a",
+          "#333333",
+          "#555555",
+          "#777777",
+          "#a3a3a3",
+          "#d6d6d6",
+          "#f2f2f2"
+        ]
+      },
+      "field-white": {
+        "role": "neutral",
+        "displayName": "Field White",
+        "canonical": "#ffffff",
+        "tonalRamp": [
+          "#262626",
+          "#474747",
+          "#6b6b6b",
+          "#8f8f8f",
+          "#b3b3b3",
+          "#d6d6d6",
+          "#f2f2f2",
+          "#ffffff"
+        ]
+      },
+      "platform-gray": {
+        "role": "neutral",
+        "displayName": "Platform Gray",
+        "canonical": "#555555",
+        "tonalRamp": [
+          "#262626",
+          "#3a3a3a",
+          "#555555",
+          "#6e6e6e",
+          "#888888",
+          "#a3a3a3",
+          "#c2c2c2",
+          "#f2f2f2"
+        ]
+      },
+      "night-gray": {
+        "role": "neutral",
+        "displayName": "Night Gray",
+        "canonical": "#a3a3a3",
+        "tonalRamp": [
+          "#262626",
+          "#3a3a3a",
+          "#555555",
+          "#6e6e6e",
+          "#888888",
+          "#a3a3a3",
+          "#c2c2c2",
+          "#f2f2f2"
+        ]
+      },
+      "hairline": {
+        "role": "neutral",
+        "displayName": "Hairline",
+        "canonical": "#d6d6d6",
+        "tonalRamp": [
+          "#262626",
+          "#3a3a3a",
+          "#555555",
+          "#6e6e6e",
+          "#888888",
+          "#a3a3a3",
+          "#d6d6d6",
+          "#f2f2f2"
+        ]
+      },
+      "wash": {
+        "role": "neutral",
+        "displayName": "Wash",
+        "canonical": "#f2f2f2",
+        "tonalRamp": [
+          "#262626",
+          "#3a3a3a",
+          "#555555",
+          "#6e6e6e",
+          "#888888",
+          "#a3a3a3",
+          "#d6d6d6",
+          "#f2f2f2"
+        ]
+      }
+    },
+    "typographyMeta": {
+      "display": {
+        "displayName": "Display",
+        "purpose": "The landing headline only; one per page."
+      },
+      "headline": {
+        "displayName": "Headline",
+        "purpose": "Landing section titles, one shouting phrase per section."
+      },
+      "title": {
+        "displayName": "Title",
+        "purpose": "Dashboard page title in the top bar."
+      },
+      "station": {
+        "displayName": "Station",
+        "purpose": "Station names on the line."
+      },
+      "lede": {
+        "displayName": "Lede",
+        "purpose": "One sentence under the display line, max 44rem."
+      },
+      "body": {
+        "displayName": "Body",
+        "purpose": "Prose, about 34rem to 40rem per column."
+      },
+      "label": {
+        "displayName": "Label",
+        "purpose": "Field labels above inputs."
+      },
+      "column-head": {
+        "displayName": "Column head",
+        "purpose": "Table header cells only, uppercase."
+      },
+      "mono": {
+        "displayName": "Mono",
+        "purpose": "Code, commands, ids, and live measured values; tabular figures."
+      }
+    },
+    "shadows": [
+      {
+        "name": "signage-stripe",
+        "value": "inset 0 2px 0 #ffffff",
+        "purpose": "Structural, not elevation: with a 6px black top border, the double rule on the landing band and the dashboard rail."
+      }
+    ],
+    "motion": [
+      {
+        "name": "invert",
+        "value": "120ms ease-out",
+        "purpose": "Background and color swap on plate hover."
+      },
+      {
+        "name": "arrow-nudge",
+        "value": "160ms cubic-bezier(0.16, 1, 0.3, 1)",
+        "purpose": "Plate arrow slides 3px right on hover."
+      },
+      {
+        "name": "ride",
+        "value": "900ms linear",
+        "purpose": "The rider crosses the line; each stop fills at i * 225ms. Removed under reduced motion."
+      },
+      {
+        "name": "depart",
+        "value": "500ms cubic-bezier(0.16, 1, 0.3, 1) after 3200ms",
+        "purpose": "The rider leaves the terminus; the stops fade back over 700ms."
+      },
+      {
+        "name": "timetable",
+        "value": "first run ~1.2s after load, then every 7000ms while visible",
+        "purpose": "The train runs by itself, each run a real GET /api/v1/health."
+      },
+      {
+        "name": "beat",
+        "value": "1400ms cubic-bezier(0.16, 1, 0.3, 1)",
+        "purpose": "The live pulse beats when a fresh /api/v1/stats reading lands (every 5000ms)."
+      },
+      {
+        "name": "arrive",
+        "value": "420ms cubic-bezier(0.16, 1, 0.3, 1)",
+        "purpose": "A new row slides into the request log."
+      }
+    ],
+    "breakpoints": [
+      {
+        "name": "rail-narrow",
+        "value": "1100px"
+      },
+      {
+        "name": "stack",
+        "value": "900px"
+      },
+      {
+        "name": "compact",
+        "value": "760px"
+      },
+      {
+        "name": "narrow",
+        "value": "480px"
+      },
+      {
+        "name": "short",
+        "value": "max-height 560px"
+      },
+      {
+        "name": "pane-composer",
+        "value": "container 44rem"
+      },
+      {
+        "name": "pane-stacked-rows",
+        "value": "container 34rem"
+      },
+      {
+        "name": "root-18",
+        "value": "1800px"
+      },
+      {
+        "name": "root-20",
+        "value": "2400px"
+      }
+    ],
+    "radii": [
+      {
+        "name": "radius-sm",
+        "value": "8px",
+        "purpose": "Controls: plates, inputs, the clone box, row buttons, the flash."
+      },
+      {
+        "name": "radius",
+        "value": "12px",
+        "purpose": "Containers: cards, the request log, code blocks."
+      },
+      {
+        "name": "pill",
+        "value": "999px",
+        "purpose": "Tags."
+      }
+    ]
+  },
+  "components": [
+    {
+      "name": "Plate",
+      "kind": "button",
+      "refersTo": "plate",
+      "description": "Primary action: a square black sign that inverts on hover; arrow for plates that go somewhere.",
+      "html": "<button class=\"ds-plate\">Open the live dashboard <svg viewBox=\"0 0 20 20\" aria-hidden=\"true\"><path d=\"M3 10h12M11 5l5 5-5 5\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"2.5\"/></svg></button>",
+      "css": ".ds-plate { display: inline-flex; align-items: center; gap: 0.75rem; min-height: 3rem; padding: 0 1.25rem; border: 2px solid #000; border-radius: 0; background: #000; color: #fff; font-family: \"Helvetica Neue\", Helvetica, \"Nimbus Sans\", Arial, sans-serif; font-weight: 700; font-size: 1.0625rem; cursor: pointer; transition: background-color 120ms ease-out, color 120ms ease-out; } .ds-plate svg { width: 1.25rem; height: 1.25rem; transition: transform 160ms cubic-bezier(0.16, 1, 0.3, 1); } .ds-plate:hover { background: #fff; color: #000; } .ds-plate:hover svg { transform: translateX(3px); } .ds-plate:focus-visible { outline: 3px solid #000; outline-offset: 2px; } .ds-plate:disabled { cursor: progress; background: #f2f2f2; color: #555; border-color: #d6d6d6; }"
+    },
+    {
+      "name": "Quiet Plate",
+      "kind": "button",
+      "refersTo": "plate-quiet",
+      "description": "Secondary action on white: outlined plate that fills black on hover.",
+      "html": "<button class=\"ds-plate-quiet\">Send a request</button>",
+      "css": ".ds-plate-quiet { display: inline-flex; align-items: center; min-height: 3rem; padding: 0 1.25rem; border: 2px solid #000; border-radius: 0; background: #fff; color: #000; font-family: \"Helvetica Neue\", Helvetica, \"Nimbus Sans\", Arial, sans-serif; font-weight: 700; font-size: 1.0625rem; cursor: pointer; transition: background-color 120ms ease-out, color 120ms ease-out; } .ds-plate-quiet:hover { background: #000; color: #fff; } .ds-plate-quiet:focus-visible { outline: 3px solid #000; outline-offset: 2px; }"
+    },
+    {
+      "name": "Row Button",
+      "kind": "button",
+      "refersTo": "row-button",
+      "description": "Compact plate for actions inside table rows.",
+      "html": "<button class=\"ds-row-btn\">Delete</button>",
+      "css": ".ds-row-btn { min-height: 2.25rem; padding: 0 0.875rem; border: 2px solid #000; border-radius: 0; background: #fff; color: #000; font-family: \"Helvetica Neue\", Helvetica, Arial, sans-serif; font-size: 0.875rem; font-weight: 700; cursor: pointer; } .ds-row-btn:hover { background: #000; color: #fff; } .ds-row-btn:focus-visible { outline: 3px solid #000; outline-offset: 2px; }"
+    },
+    {
+      "name": "Field",
+      "kind": "input",
+      "refersTo": "input",
+      "description": "Bold label stacked over a square 2px-bordered input.",
+      "html": "<label class=\"ds-field\"><span>Title</span><input class=\"ds-input\" placeholder=\"New item\" /></label>",
+      "css": ".ds-field { display: grid; gap: 0.375rem; font-family: \"Helvetica Neue\", Helvetica, Arial, sans-serif; } .ds-field > span { font-size: 0.875rem; font-weight: 700; } .ds-input { font: inherit; color: #000; background: #fff; border: 2px solid #000; border-radius: 0; padding: 0 0.75rem; min-height: 3rem; width: 100%; box-sizing: border-box; } .ds-input::placeholder { color: #555; } .ds-input:focus-visible { outline: 3px solid #000; outline-offset: 0; }"
+    },
+    {
+      "name": "Tag",
+      "kind": "chip",
+      "refersTo": "tag",
+      "description": "Square role chip: outlined for the ordinary value, solid for the elevated one.",
+      "html": "<span class=\"ds-tag\">user</span> <span class=\"ds-tag ds-tag-solid\">superuser</span>",
+      "css": ".ds-tag { display: inline-block; padding: 0 0.5rem; border: 2px solid #000; font-family: \"Helvetica Neue\", Helvetica, Arial, sans-serif; font-size: 0.8125rem; font-weight: 700; } .ds-tag-solid { background: #000; color: #fff; }"
+    },
+    {
+      "name": "Rail",
+      "kind": "nav",
+      "refersTo": "rail-link",
+      "description": "Dashboard rail: disc bullets, filled white for the current page, barred for a locked one.",
+      "html": "<nav class=\"ds-rail\"><a class=\"ds-rail-link\" href=\"#\" aria-current=\"page\"><span class=\"ds-disc\"></span>Items</a><a class=\"ds-rail-link\" href=\"#\"><span class=\"ds-disc\"></span>Account</a><span class=\"ds-rail-link ds-locked\"><span class=\"ds-disc\"></span>Users</span></nav>",
+      "css": ".ds-rail { display: grid; gap: 0.25rem; width: 15rem; padding: 1.25rem 1rem; background: #000; border-top: 6px solid #000; box-shadow: inset 0 2px 0 #fff; font-family: \"Helvetica Neue\", Helvetica, Arial, sans-serif; } .ds-rail-link { display: flex; align-items: center; gap: 0.75rem; min-height: 2.75rem; padding: 0 0.5rem; font-weight: 700; font-size: 1.0625rem; text-decoration: none; color: #a3a3a3; } .ds-disc { position: relative; width: 1rem; height: 1rem; border-radius: 50%; border: 3px solid currentColor; flex: none; box-sizing: border-box; } a.ds-rail-link:hover { color: #fff; } .ds-rail-link:focus-visible { outline: 3px solid #fff; outline-offset: 2px; } .ds-rail-link[aria-current=\"page\"] { color: #fff; } .ds-rail-link[aria-current=\"page\"] .ds-disc { background: #fff; border-color: #fff; } .ds-locked { cursor: not-allowed; } .ds-locked .ds-disc::after { content: \"\"; position: absolute; left: 50%; top: 50%; width: 150%; height: 3px; background: currentColor; transform: translate(-50%, -50%) rotate(-45deg); }"
+    },
+    {
+      "name": "The Line",
+      "kind": "custom",
+      "refersTo": "stop",
+      "description": "Signature: stations as outlined discs on a 6px black rule; stops fill black as the request passes.",
+      "html": "<ol class=\"ds-line\"><li><span class=\"ds-stop ds-lit\"></span><b>Accept</b><span>One epoll worker per CPU</span></li><li><span class=\"ds-stop\"></span><b>Parse</b><span>In place, no allocation</span></li><li><span class=\"ds-stop\"></span><b>Write</b><span>Batched into one write</span></li></ol>",
+      "css": ".ds-line { position: relative; display: grid; grid-template-columns: repeat(3, 1fr); margin: 0; padding: 0; list-style: none; font-family: \"Helvetica Neue\", Helvetica, Arial, sans-serif; } .ds-line::before { content: \"\"; position: absolute; left: 0; right: 0; top: 0.875rem; height: 6px; background: #000; } .ds-line li { position: relative; display: grid; gap: 0.25rem; padding-right: 1.5rem; } .ds-stop { position: relative; z-index: 1; width: 2.25rem; height: 2.25rem; box-sizing: border-box; border-radius: 50%; border: 6px solid #000; background: #fff; margin-bottom: 0.75rem; } .ds-lit { background: #000; } .ds-line b { font-size: 1.5rem; letter-spacing: -0.02em; line-height: 1.1; } .ds-line li > span:last-child { color: #555; font-size: 0.9375rem; line-height: 1.4; }"
+    },
+    {
+      "name": "Departure Strip",
+      "kind": "custom",
+      "refersTo": "departure-strip",
+      "description": "Black strip of live process readings: night-gray labels, white bold mono values.",
+      "html": "<p class=\"ds-strip\"><span>Viltrum <b>1.5.0</b></span><span>workers <b>2</b></span><span>up <b>48 s</b></span></p>",
+      "css": ".ds-strip { display: flex; flex-wrap: wrap; gap: 0.5rem 2.25rem; align-items: center; margin: 0; padding: 1rem 2rem; background: #000; font-family: \"Helvetica Neue\", Helvetica, Arial, sans-serif; font-size: 1.25rem; } .ds-strip span { color: #a3a3a3; } .ds-strip b { color: #fff; font-family: ui-monospace, \"SF Mono\", \"Cascadia Mono\", Menlo, Consolas, monospace; font-weight: 700; font-variant-numeric: tabular-nums; }"
+    },
+    {
+      "name": "Table",
+      "kind": "card",
+      "refersTo": "row-button",
+      "description": "Ruled table: header between 2px black rules, hairline rows, mono ids, gray descriptions.",
+      "html": "<table class=\"ds-table\"><thead><tr><th>Id</th><th>Title</th><th>Description</th></tr></thead><tbody><tr><td class=\"ds-num\">1</td><td class=\"ds-strong\">First item</td><td class=\"ds-desc\">Lives in memory</td></tr></tbody></table>",
+      "css": ".ds-table { width: 100%; border-collapse: collapse; font-family: \"Helvetica Neue\", Helvetica, Arial, sans-serif; font-variant-numeric: tabular-nums; } .ds-table th, .ds-table td { text-align: left; vertical-align: top; padding: 0.875rem 1rem 0.875rem 0; border-bottom: 1px solid #d6d6d6; } .ds-table th { font-size: 0.8125rem; font-weight: 700; letter-spacing: 0.02em; text-transform: uppercase; border-top: 2px solid #000; border-bottom: 2px solid #000; } .ds-num { font-family: ui-monospace, \"SF Mono\", Menlo, Consolas, monospace; font-size: 0.875rem; } .ds-strong { font-weight: 700; } .ds-desc { color: #555; }"
+    }
+  ],
+  "narrative": {
+    "northStar": "The Transit Line",
+    "overview": "Every surface is signage for a request's trip through Viltrum. Black bands and a black rail carry the identity the way a station sign does; the white field below is where the reading happens. The logo's disc-and-V is the system's bullet: a filled white disc means \"here\", an outlined disc means \"elsewhere\", a barred disc means \"closed\". A single 6px black rule is the line itself; it runs across the landing's first viewport, then turns and runs down the left edge past every section, which are its stops.\n\nThe palette is the logo's, nothing more: pure black, pure white, and grays that only exist to rule lines and step text down. Type is a system grotesk set heavy and tight at sign scale, with monospace reserved for code and measured values. Density is calm: one focal move per view, generous white field, and every number on the page is a live reading from the process serving it. There are no shadows, gradients, hosted fonts, images other than the logo, or color of any kind. The black and white palette, the system font stack, and the zero hosted-asset rule are user-pinned decisions, not defaults.",
+    "keyCharacteristics": [
+      "Monochrome: black #000 and white #fff, grays for rules and secondary text only.",
+      "Square corners everywhere; the only round shapes are discs (stops, bullets, the logo).",
+      "2px black rules for structure, 1px hairlines for rows, 6px black for the line.",
+      "Interaction is inversion: black becomes white and white becomes black.",
+      "System grotesk at weight 700 to 800 with negative tracking for headings; mono for code and live values."
+    ],
+    "rules": [
+      {
+        "name": "The Logo Palette Rule",
+        "body": "Black and white are the identity; grays only rule lines or step text down. No hue, no gradient, no tint enters the system.",
+        "section": "colors"
+      },
+      {
+        "name": "The Inversion Rule",
+        "body": "A state change swaps black and white (hover, current, selected, solid tag). There is no third \"accent\" state color.",
+        "section": "colors"
+      },
+      {
+        "name": "The Machine Voice Rule",
+        "body": "Mono appears only where the text is code or a measured value. Prose, labels, and headings are always the grotesk.",
+        "section": "typography"
+      },
+      {
+        "name": "The Bundled Type Rule",
+        "body": "Fonts come from the operating system. The binary serves no font files and the page loads none from anywhere else.",
+        "section": "typography"
+      },
+      {
+        "name": "The Flat Sign Rule",
+        "body": "Nothing lifts, glows, or casts. Hierarchy comes from inversion, weight, and rules.",
+        "section": "elevation"
+      },
+      {
+        "name": "The Only Curve Rule",
+        "body": "If it is round, it is a disc from the logo's vocabulary. Every other corner is square.",
+        "section": "shapes"
+      }
+    ],
+    "dos": [
+      "**Do** invert black and white for every state change; hover, current, and selected share one move.",
+      "**Do** use 2px black borders for controls and structure, 1px hairline only between rows, and 6px only for the line.",
+      "**Do** keep every corner square; use the disc only for stops, bullets, and the logo.",
+      "**Do** set mono only for code, commands, ids, and measured values, with tabular figures.",
+      "**Do** show the 3px focus outline in the opposite color of its ground.",
+      "**Do** mark destinations with the logo's disc grammar: filled is here, outlined is elsewhere, barred is closed.",
+      "**Do** show only live readings from the process in strips and counters."
+    ],
+    "donts": [
+      "**Don't** introduce any hue, tint, or gradient; the palette is the logo's black and white.",
+      "**Don't** add drop shadows or lifted surfaces; the only box-shadow is the band's inset signage stripe.",
+      "**Don't** load fonts, images, icon sets, or scripts from anywhere but the binary; type comes from the system stack and icons are inline SVG.",
+      "**Don't** round rectangles; no border-radius except the 50% disc.",
+      "**Don't** use hairline gray for text, or platform gray on black (use night gray there)."
+    ]
+  }
+}

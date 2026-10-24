@@ -2,36 +2,35 @@
 <html lang="en">
 <head>
   <meta charset="utf-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>@{page.title} · Viltrum</title>
-  <link rel="stylesheet" href="/static/style.css" />
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+  <title>@{page.title} · Viltrum dashboard</title>
+  <link rel="icon" href="/static/favicon.svg" type="image/svg+xml" />
+  <link rel="stylesheet" href="/static/style.css?v=5" />
 </head>
-<body>
-  <div class="shell">
-    <header class="top">
-      <a class="mark" href="/items">Viltrum</a>
-      <nav class="nav">
-        <a class="nav-link" href="/items">Items</a>
-        @{nav_users}
-        <a class="nav-link is-active" href="/account">Account</a>
-      </nav>
-      <span class="top-end">@{page.email}</span>
-    </header>
-    <main class="main">
+<body class="app">
+  <aside class="rail">
+    <a class="brand" href="/"><img src="/static/logo-white.svg" alt="" width="40" height="40" />Viltrum</a>
+    <nav class="rail-nav" aria-label="Dashboard">@{rail}</nav>
+    <div class="rail-foot">@{rail_foot}</div>
+  </aside>
+  <div class="work">
+    <header class="bar">
       <h1>Account</h1>
+      <span class="api">JSON: GET /api/v1/users/me</span>
+    </header>
+    <main class="pane">
       <dl class="meta">
         <dt>Email</dt><dd>@{page.email}</dd>
         <dt>Name</dt><dd>@{full_name}</dd>
         <dt>Role</dt><dd>@{role}</dd>
-        <dt>Id</dt><dd>@{user_id}</dd>
+        <dt>Id</dt><dd class="mono">@{user_id}</dd>
       </dl>
-      <form method="post" action="/logout">
-        <button type="submit" class="btn btn-quiet">Sign out</button>
-      </form>
+      <div class="hint">
+        <p>Your session is an HttpOnly cookie that lasts seven days. The JSON API accepts the same cookie, or a Bearer token from POST /api/v1/login/access-token.</p>
+        <form method="post" action="/logout"><button type="submit" class="plate plate-quiet">Sign out</button></form>
+      </div>
     </main>
-    <footer class="foot">
-      <p><a href="/items">Items</a></p>
-    </footer>
   </div>
+  <script src="/static/live.js?v=5" defer></script>
 </body>
 </html>
